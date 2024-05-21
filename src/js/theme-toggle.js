@@ -1,5 +1,3 @@
-// src/js/theme-toggle.js
-
 document.addEventListener('DOMContentLoaded', (event) => {
     const systemDefaultBtn = document.getElementById('system-default');
     const lightModeBtn = document.getElementById('light-mode');
@@ -12,12 +10,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
         
         if (theme === 'dark-mode') {
             document.body.classList.add('dark-mode');
+            window.renderer.setClearColor(0x1e1e1e); // Dark background color
         } else if (theme === 'light-mode') {
             document.body.classList.add('light-mode');
+            window.renderer.setClearColor(0xf0f0f0); // Light background color
         } else {
             // Use system preference
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 document.body.classList.add('dark-mode');
+                window.renderer.setClearColor(0x1e1e1e); // Dark background color
+            } else {
+                window.renderer.setClearColor(0xf0f0f0); // Light background color
             }
         }
         
