@@ -5,8 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
     <link rel="stylesheet" href="src/css/style.css">
+    <style>
+        /* Hidden navigation bar */
+        #hidden-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 0;
+            transition: top 0.3s;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+        }
+        #hidden-nav.hidden {
+            top: -100px; /* Hides it above the viewport */
+        }
+        #hidden-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        #hidden-nav li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        #hidden-nav li a:hover {
+            color: #2196F3; /* Highlight color */
+        }
+
+        /* Resume section */
+        #resume-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 1rem;
+            line-height: 1.5;
+        }
+        #resume-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.25rem;
+            text-align: center;
+        }
+        #resume-section h3 {
+            font-size: 1.35rem;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 2px solid #2196F3;
+            display: inline-block;
+        }
+        #resume-section h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+        #resume-section ul {
+            margin-left: 1.2rem;
+            list-style: disc;
+        }
+        #resume-section li {
+            margin-bottom: 0.35rem;
+        }
+        .position-meta {
+            font-style: italic;
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        .contact-links a {
+            color: #2196F3;
+            text-decoration: none;
+        }
+        .contact-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
+    <nav id="hidden-nav" class="hidden">
+        <ul>
+            <li><a href="#about">About Me</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#resume-section">Résumé</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
     <h1>Welcome to My Portfolio</h1>
     <div id="three-js-container"></div>
     <div class="theme-toggle">
@@ -15,57 +102,101 @@
         <button id="dark-mode" class="toggle-option">Dark</button>
     </div>
 
-    <div id="resume">
+    <!-- ==================== RESUME SECTION ==================== -->
+    <section id="resume-section">
         <h2>Don Cuddihee</h2>
-        <p><a href="mailto:doncuddi3@gmail.com">doncuddi3@gmail.com</a> | <a href="https://zaptrix.github.io/portfolio/">https://zaptrix.github.io/portfolio/</a> | <a href="https://github.com/zaptrix">github.com/zaptrix</a></p>
+        <p class="contact-links">
+            <a href="mailto:doncudd3@gmail.com">doncudd3@gmail.com</a> &nbsp;|&nbsp;
+            <a href="https://zaptrix.github.io/portfolio/" target="_blank" rel="noopener">zaptrix.github.io/portfolio/</a> &nbsp;|&nbsp;
+            <a href="https://github.com/zaptrix" target="_blank" rel="noopener">github.com/zaptrix</a>
+        </p>
 
+        <!-- ===== SUMMARY ===== -->
+        <h3>Summary</h3>
+        <p>
+            Technical support professional with a solid foundation in computer science and hands‑on experience building and analyzing AI‑driven solutions. Motivated to design, deploy, and maintain scalable ML models and applications while collaborating with cross‑functional teams to deliver robust, real‑time results.
+        </p>
+
+        <!-- ===== SKILLS ===== -->
         <h3>Skills</h3>
-        <p>Languages: C++, Java, Python, JavaScript, VB.NET, Assembly, HTML, CSS, SQL, XML<br>
-        Tools: Git, Visual Studio, Eclipse, NetBeans, TensorFlow, PyTorch, Microsoft Office, Google Docs, Blender, AutoCAD, SolidWorks<br>
-        Security: Wireshark, Nmap, Powershell<br>
-        Platforms: Windows, Linux, Android, AWS, Azure, VMware</p>
+        <ul>
+            <li><strong>Programming:</strong> Python, C++, Java, JavaScript, VB.NET, SQL</li>
+            <li><strong>AI / ML (Personal):</strong> PyTorch, TensorFlow, Stable Diffusion</li>
+            <li><strong>DevOps &amp; Cloud:</strong> Git, Docker, FastAPI, AWS EC2/S3, Azure</li>
+            <li><strong>Security &amp; Networking:</strong> Wireshark, Nmap, PowerShell</li>
+            <li><strong>Platforms:</strong> Windows, macOS, Linux, Android</li>
+        </ul>
 
-        <h3>Experience</h3>
-        <p><strong>Call Center Analyst, Agilant Solutions</strong> – Lisle, IL<br>
-        Feb 2024 – Present<br>
-        Improved customer interaction quality by achieving an average etiquette score of 4.83/5, ranking in the top 5 for April, enhancing overall customer satisfaction.<br>
-        Informed leadership about changes in client site information, enabling timely dissemination of new information to the team, ensuring accurate support.<br>
-        Handled a high volume of calls with a 99.40% acceptance rate and 0.60% abandonment rate, effectively managing call flow and resolving issues efficiently, leading to an average handling time of 9:39 minutes.</p>
+        <!-- ===== PERSONAL PROJECTS ===== -->
+        <h3>Personal Projects</h3>
+        <h4>Stable Diffusion WebUI <span class="position-meta">2024</span></h4>
+        <ul>
+            <li>Configured WebUI for an RTX 5070 desktop GPU; generated <strong>2,000+ images</strong> from text prompts entirely offline.</li>
+            <li>Gained practical experience with Python environments, dependency management, and troubleshooting installation issues.</li>
+        </ul>
 
-        <p><strong>Help Desk Student Worker, College of DuPage</strong> – Glen Ellyn, IL<br>
-        Sep 2021 – Dec 2022<br>
-        Managed 20-25 daily calls, focusing on resolving level 1-3 support incidents, applying troubleshooting skills and providing timely solutions, ensuring user satisfaction and efficient issue resolution.<br>
-        Trained new hires in communication and customer service skills, developing and delivering comprehensive training sessions, improving the onboarding process and enhancing the team's overall performance.<br>
-        Prioritized and managed support tickets, implementing organizational strategies and time management techniques, maintaining an efficient workflow and smooth operations within the help desk environment.</p>
+        <h4>Local LLM <span class="position-meta">2024</span></h4>
+        <ul>
+            <li>Gained hands‑on experience with C++ build systems, Python scripting, and deploying AI models outside of cloud environments.</li>
+            <li>Conducted experiments with prompt engineering and model parameters to explore capabilities and limitations.</li>
+        </ul>
 
-        <p><strong>Sales Associate, TCC Wireless</strong> – Lisle, IL<br>
-        Aug 2020 – Sept 2021<br>
-        Sold mobile phones and internet services across T-Mobile and Sprint networks, leveraging strong product knowledge and persuasive sales techniques, consistently meeting and often exceeding sales targets.<br>
-        Troubleshot and resolved technical issues with devices, utilizing technical expertise and customer service skills, ensuring devices were fully functional and customers were satisfied with their purchases.<br>
-        Addressed various customer complaints and concerns, providing empathetic and effective solutions, achieving a high rate of customer retention and positive feedback.</p>
+        <h4>Pokémon GO IV‑Scanner Automation <span class="position-meta">2024</span></h4>
+        <ul>
+            <li>Used MacroDroid to automate scanning of Pokémon IVs.</li>
+            <li>Exported logs to CSV for analysis.</li>
+        </ul>
 
-        <p><strong>Sales Associate, MarketSource</strong> – Wheaton, IL<br>
-        July 2018 – Aug 2020<br>
-        Sold mobile phones and internet services across Sprint, AT&T, and Verizon networks, leveraging in-depth product knowledge and effective sales strategies, consistently achieving and surpassing sales goals.<br>
-        Troubleshot a variety of devices, applying technical skills and problem-solving abilities, ensuring customer devices were operating optimally and reducing return rates.<br>
-        Resolved a range of customer complaints and inquiries, focusing on enhancing customer satisfaction, utilizing excellent communication and conflict resolution skills, maintaining a high level of customer loyalty.</p>
+        <!-- ===== PROFESSIONAL EXPERIENCE ===== -->
+        <h3>Professional Experience</h3>
+        <h4>Call Center Analyst, Agilant Solutions — Lisle, IL <span class="position-meta">Feb 2024 – Present</span></h4>
+        <ul>
+            <li>Resolve 35–40 technical tickets/day with ~99.4% call‑acceptance and &lt;1% abandonment; ranked top‑5 in etiquette (4.83/5).</li>
+            <li>Communicated system issues to leadership, honing skills in documentation and process alignment.</li>
+            <li>Adapted quickly to evolving technologies and workflows, supporting overall operational stability.</li>
+        </ul>
 
-        <h3>Projects</h3>
-        <p><strong>Minecraft Bot</strong> – <a href="https://name.com/projectdame">name.com/projectdame</a><br>
-        Contributed to the development of a Minecraft bot integrated with GPT-4 and Mineflayer, enhancing user experiences with helpful real-time feedback and in-game assistance.</p>
+        <h4>Help Desk Student Worker, College of DuPage — Glen Ellyn, IL <span class="position-meta">Sep 2021 – Dec 2022</span></h4>
+        <ul>
+            <li>Resolved support tickets for Windows and macOS lab systems, developing a systematic incident‑resolution workflow.</li>
+            <li>Logged fixes in ticketing software, improving knowledge‑base coverage and future issue triage.</li>
+        </ul>
 
-        <p><strong>Custom GPT</strong> – <a href="https://github.com/name/project">github.com/name/project</a><br>
-        Developed a custom GPT instructed to crawl Dotabuff.com and analyze player match history, providing detailed insights and analytics for Dota 2 players.</p>
+        <h4>Sales Associate (Various) <span class="position-meta">Jul 2018 – Sep 2021</span></h4>
+        <ul>
+            <li>Exceeded monthly sales targets by 15–20% through consultative selling of mobile and internet services.</li>
+            <li>Strengthened interpersonal communication skills.</li>
+        </ul>
 
-        <p><strong>Custom Built PC</strong> – <a href="https://projectsite.com">projectsite.com</a><br>
-        Designed and assembled a high-performance custom PC, optimizing components for gaming, programming, and resource-intensive tasks.</p>
-
+        <!-- ===== EDUCATION ===== -->
         <h3>Education</h3>
-        <p><strong>Lewis University</strong> – BS in Computer Science, 2023</p>
-    </div>
+        <h4>Lewis University, Romeoville, IL — Bachelor of Science in Computer Science <span class="position-meta">2023</span></h4>
+        <p>GPA 3.42</p>
+    </section>
+
+    <!-- ==================== OTHER CONTENT (placeholders) ==================== -->
+    <section id="about"><!-- ... existing About content ... --></section>
+    <section id="skills"><!-- ... existing Skills content ... --></section>
+    <section id="projects"><!-- ... existing Projects content ... --></section>
+    <section id="experience"><!-- ... existing Experience content ... --></section>
+    <section id="contact"><!-- ... existing Contact content ... --></section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="src/js/app.js"></script>
     <script src="src/js/theme-toggle.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hiddenNav = document.getElementById('hidden-nav');
+
+            // Show the nav bar when hovering over the top area
+            document.addEventListener('mousemove', (e) => {
+                if (e.clientY <= 100) {
+                    hiddenNav.classList.remove('hidden');
+                } else {
+                    hiddenNav.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
