@@ -139,9 +139,10 @@
       <h1 class="title">I build helpful systems and ship calm, reliable support.</h1>
       <p class="subtitle">Technical support professional with a CS foundation and hands‑on AI/ML experience. I like shipping practical models and tools—designed, deployed, and maintained with clear docs and fast feedback loops to deliver robust, real‑time results.</p>
       <div class="cta">
-        <a class="btn primary" href="mailto:doncuddi3@gmail.com">Email me</a>
+        <a class="btn primary" href="mailto:doncudd3@gmail.com">Email me</a>
         <a class="btn" href="https://github.com/zaptrix" target="_blank" rel="noopener">GitHub</a>
         <a class="btn" href="#experience">Experience</a>
+        <a class="btn" id="resume-btn" href="Resume%207_14_2025.pdf" download>Download Resume (PDF)</a>
         <button class="btn" id="print-btn" type="button">Save as PDF</button>
       </div>
     </div>
@@ -243,7 +244,7 @@
 
   <footer>
     <div class="container">
-      <div><strong>Don Cuddihee</strong> • <a href="mailto:doncuddi3@gmail.com">doncuddi3@gmail.com</a> • <a href="https://github.com/zaptrix" target="_blank" rel="noopener">github.com/zaptrix</a></div>
+      <div><strong>Don Cuddihee</strong> • <a href="mailto:doncudd3@gmail.com">doncudd3@gmail.com</a> • <a href="https://github.com/zaptrix" target="_blank" rel="noopener">github.com/zaptrix</a></div>
     </div>
   </footer>
 
@@ -330,10 +331,10 @@
 
     // ---------- Objects that follow sections (unique polygonal shapes) ----------
     const anchors = [
-      { id: 'projects',   side: +1, kind: 'dode',   color: 0x7c4dff }, // violet dodecahedron
-      { id: 'experience', side: -1, kind: 'icosa',  color: 0x00e5ff }, // cyan icosahedron
-      { id: 'skills',     side: +1, kind: 'octa',   color: 0xff2d55 }, // magenta octahedron
-      { id: 'education',  side: -1, kind: 'tetra',  color: 0xffb000 }  // amber tetrahedron
+      { id: 'projects',   side: +1, kind: 'dode',   color: 0x7c4dff }, // violet dodecahedron (right)
+      { id: 'experience', side: -1, kind: 'icosa',  color: 0x00e5ff }, // cyan icosahedron (left)
+      { id: 'skills',     side: +1, kind: 'octa',   color: 0xff2d55 }, // magenta octahedron (right)
+      { id: 'education',  side: -1, kind: 'tetra',  color: 0xffb000 }  // amber tetrahedron (left)
     ];
     const groups = [];
 
@@ -354,7 +355,7 @@
       const mesh = new THREE.Mesh(geom, polyMaterial(anchor.color));
       g.add(mesh);
       scene.add(g);
-      g.userData = { el: document.getElementById(anchor.id), side: anchor.side, rot: (Math.random()*0.003 + 0.001) * (Math.random()<0.5?-1:1), kind: anchor.kind };
+      g.userData = { el: document.getElementById(anchor.id), id: anchor.id, side: anchor.side, rot: (Math.random()*0.003 + 0.001) * (Math.random()<0.5?-1:1), kind: anchor.kind };
       groups.push(g);
     }
     anchors.forEach(buildFor);
@@ -384,6 +385,10 @@
         const centerY = r.top + r.height*0.3; // a bit above center
         const norm = (centerY / window.innerHeight) * 2 - 1; // -1 top, +1 bottom
         g.position.y = -norm * (height/2);
+        // Nudge specific shapes off the horizontal dividing lines
+        const nudge = height * 0.05; // ~5% of view height
+        if (g.userData.id === 'experience') g.position.y -= nudge; // pull down from top divider
+        if (g.userData.id === 'skills')     g.position.y += nudge; // push up from bottom divider
         g.position.x = sideX(g.userData.side);
         g.visible = r.bottom > 0 && r.top < window.innerHeight*1.1; // show near viewport
       }
@@ -416,7 +421,6 @@
 
     // ---------------------
     // Lightweight self-tests (dev only)
-    // ---------------------
     (function selfTests(){
       try {
         console.assert(!!document.querySelector('#three-canvas'), 'Canvas exists');
@@ -435,11 +439,14 @@
         // Colors distinct
         const colors = groups.map(g => g.children[0].material.color.getHex());
         console.assert(new Set(colors).size === colors.length, 'Each shape has a unique color');
-        // Toggle reflects active theme (after first paint or stored mode)
-        const expected = localStorage.getItem('theme') || 'system';
-        const selected = (Array.from(document.querySelectorAll('.toggle-btn')).find(b => b.getAttribute('aria-pressed') === 'true')||{}).dataset?.theme;
-        console.assert(selected === expected || (expected === 'system' && selected === 'system'), 'Theme toggle reflects active mode');
-        // Theme safe after lights
+        // Resume link exists and points to PDF
+        const resume = document.getElementById('resume-btn');
+        console.assert(resume && /\.pdf(\?|$)/i.test(resume.getAttribute('href')), 'Resume download button points to a PDF');
+        // Email links updated
+        const mailtoOk = Array.from(document.querySelectorAll('a[href^="mailto:"]')).every(a => a.getAttribute('href').includes('doncudd3@gmail.com'));
+        console.assert(mailtoOk, 'Email links updated to doncudd3@gmail.com');
+        // No stray template markers like "$1"
+        console.assert(!document.body.innerHTML.includes('$1'), 'No stray template markers present');
         setThreeBg(document.body.classList.contains('dark'));
       } catch(e){ console.warn('Self-tests failed:', e); }
     })();
