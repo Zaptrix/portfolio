@@ -113,6 +113,9 @@
       body { background: white; color: #111; }
       .card { break-inside: avoid; }
     }
+      /* Remove horizontal dividers (hero bottom + footer top) */
+    .hero { border-bottom: 0 !important; }
+    footer { border-top: 0 !important; }
   </style>
 </head>
 <body>
@@ -378,14 +381,15 @@
       const sideBand = (width - contWorld) / 2; // world width available outside container on each side
       const targetFromCenter = contWorld/2 + sideBand*0.6; // place 60% into side band
       const sideX = (s)=> s * targetFromCenter;
+      const verticalScale = 0.82; // compress vertical spread slightly without changing horizontal
 
       for (const g of groups){
         const el = g.userData.el; if (!el) continue;
         const r = el.getBoundingClientRect();
         const centerY = r.top + r.height*0.3; // a bit above center
         const norm = (centerY / window.innerHeight) * 2 - 1; // -1 top, +1 bottom
-        g.position.y = -norm * (height/2);
-        // Nudge specific shapes off the horizontal dividing lines
+        g.position.y = (-norm * (height/2)) * verticalScale;
+        // Keep prior nudges to avoid the two horizontal dividers
         const nudge = height * 0.05; // ~5% of view height
         if (g.userData.id === 'experience') g.position.y -= nudge; // pull down from top divider
         if (g.userData.id === 'skills')     g.position.y += nudge; // push up from bottom divider
@@ -447,6 +451,11 @@
         console.assert(mailtoOk, 'Email links updated to doncudd3@gmail.com');
         // No stray template markers like "$1"
         console.assert(!document.body.innerHTML.includes('$1'), 'No stray template markers present');
+        // New: borders removed on hero/footer
+        const hb = getComputedStyle(document.querySelector('.hero')).borderBottomWidth;
+        const ft = getComputedStyle(document.querySelector('footer')).borderTopWidth;
+        console.assert(hb === '0px' || hb === '0', 'Hero bottom border removed');
+        console.assert(ft === '0px' || ft === '0', 'Footer top border removed');
         setThreeBg(document.body.classList.contains('dark'));
       } catch(e){ console.warn('Self-tests failed:', e); }
     })();
