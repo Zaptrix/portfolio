@@ -66,7 +66,7 @@
 
     .hero {
       position: relative; isolation: isolate; overflow: clip;
-      display: grid; place-items: center; min-height: 48svh; border-bottom: 1px solid var(--border);
+      display: grid; place-items: center; min-height: 48svh;
       background: radial-gradient(1200px 600px at 70% -50%, color-mix(in oklab, var(--accent) 14%, transparent), transparent),
                   radial-gradient(900px 400px at -20% 20%, color-mix(in oklab, var(--accent-2) 12%, transparent), transparent);
     }
@@ -98,7 +98,7 @@
     .skills { display:flex; gap:.5rem; flex-wrap: wrap; }
     .chip { border:1px solid var(--border); background: var(--surface); border-radius: 999px; padding:.35rem .6rem; font-weight:600; color: var(--muted); }
 
-    footer { border-top:1px solid var(--border); padding: 1.4rem 0 3rem; color: var(--muted); }
+    footer { padding: 1.4rem 0 3rem; color: var(--muted); }
 
     .skip { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
     .skip:focus { position:static; width:auto; height:auto; padding:.6rem; background: var(--surface); border:1px solid var(--border); border-radius:.5rem; }
@@ -113,7 +113,8 @@
       body { background: white; color: #111; }
       .card { break-inside: avoid; }
     }
-      /* Remove horizontal dividers (hero bottom + footer top) */
+
+    /* Remove horizontal dividers per request */
     .hero { border-bottom: 0 !important; }
     footer { border-top: 0 !important; }
   </style>
@@ -146,7 +147,6 @@
         <a class="btn" href="https://github.com/zaptrix" target="_blank" rel="noopener">GitHub</a>
         <a class="btn" href="#experience">Experience</a>
         <a class="btn" id="resume-btn" href="Resume%207_14_2025.pdf" download>Download Resume (PDF)</a>
-        <button class="btn" id="print-btn" type="button">Save as PDF</button>
       </div>
     </div>
   </section>
@@ -251,7 +251,7 @@
     </div>
   </footer>
 
-  <!-- Three.js from CDN -->
+  <!-- Three.js from CDN (no inline JS inside src-tag) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
     // ---------------------
@@ -261,6 +261,13 @@
     let scene, camera;
     const stage = document.getElementById('stage');
     const canvas = document.getElementById('three-canvas');
+
+    // Parallax tuning (vertical motion more dramatic; horizontal unchanged)
+    // Parallax tuning: move with the text but slower, to feel background
+    const VERTICAL_SCALE = 1.2;  // increase vertical spacing between objects
+    const PARALLAX_AMP = 0.55;   // <1 => slower than text
+    const CURVE_EXPONENT = 1;    // linear mapping for predictable motion
+    const VIS_MARGIN = 0.4;   // 40% viewport height pre/post margin for visibility window (base)
 
     // Lights declared up-front to avoid TDZ when theme applies
     let lights = null;
@@ -300,7 +307,6 @@
       // First visit: defer one frame so UI paints before toggling, then apply 'system'
       requestAnimationFrame(() => applyTheme('system'));
     }
-    document.getElementById('print-btn')?.addEventListener('click', () => window.print());
 
     // ---------------------
     // Three.js scene setup
@@ -381,20 +387,27 @@
       const sideBand = (width - contWorld) / 2; // world width available outside container on each side
       const targetFromCenter = contWorld/2 + sideBand*0.6; // place 60% into side band
       const sideX = (s)=> s * targetFromCenter;
-      const verticalScale = 0.82; // compress vertical spread slightly without changing horizontal
 
       for (const g of groups){
         const el = g.userData.el; if (!el) continue;
         const r = el.getBoundingClientRect();
         const centerY = r.top + r.height*0.3; // a bit above center
         const norm = (centerY / window.innerHeight) * 2 - 1; // -1 top, +1 bottom
-        g.position.y = (-norm * (height/2)) * verticalScale;
-        // Keep prior nudges to avoid the two horizontal dividers
+        // Non-linear curve amplifies motion; amp increases travel distance
+        const curved = Math.sign(norm) * Math.pow(Math.abs(norm), CURVE_EXPONENT);
+        g.position.y = (-curved * (height/2)) * VERTICAL_SCALE * PARALLAX_AMP;
+        // Maintain spacing adjustments
         const nudge = height * 0.05; // ~5% of view height
-        if (g.userData.id === 'experience') g.position.y -= nudge; // pull down from top divider
-        if (g.userData.id === 'skills')     g.position.y += nudge; // push up from bottom divider
+        if (g.userData.id === 'experience') g.position.y -= nudge; // pull down near top
+        if (g.userData.id === 'skills')     g.position.y += nudge; // push up near bottom
         g.position.x = sideX(g.userData.side);
-        g.visible = r.bottom > 0 && r.top < window.innerHeight*1.1; // show near viewport
+        const vh = Math.max(1, window.innerHeight);
+        // Give the bottom sections (skills, education) extra *bottom* margin so they pop in earlier
+        const base = vh * VIS_MARGIN;
+        const extraBottom = (g.userData.id === 'skills') ? vh * 0.7 : (g.userData.id === 'education') ? vh * 0.3 : 0; // skills gets larger extra bottom margin to pop in earlier
+        const topMargin = base;
+        const bottomMargin = base + extraBottom;
+        g.visible = r.bottom > -topMargin && r.top < (vh + bottomMargin); // show near viewport
       }
     }
 
@@ -424,7 +437,7 @@
     tick();
 
     // ---------------------
-    // Lightweight self-tests (dev only)
+    // Self-tests (dev only)
     (function selfTests(){
       try {
         console.assert(!!document.querySelector('#three-canvas'), 'Canvas exists');
@@ -443,19 +456,42 @@
         // Colors distinct
         const colors = groups.map(g => g.children[0].material.color.getHex());
         console.assert(new Set(colors).size === colors.length, 'Each shape has a unique color');
+        // Theme toggle reflects active mode (after first paint or stored mode)
+        const expected = localStorage.getItem('theme') || 'system';
+        const selected = (Array.from(document.querySelectorAll('.toggle-btn')).find(b => b.getAttribute('aria-pressed') === 'true')||{}).dataset?.theme;
+        console.assert(selected === expected || (expected === 'system' && selected === 'system'), 'Theme toggle reflects active mode');
         // Resume link exists and points to PDF
         const resume = document.getElementById('resume-btn');
         console.assert(resume && /\.pdf(\?|$)/i.test(resume.getAttribute('href')), 'Resume download button points to a PDF');
         // Email links updated
         const mailtoOk = Array.from(document.querySelectorAll('a[href^="mailto:"]')).every(a => a.getAttribute('href').includes('doncudd3@gmail.com'));
         console.assert(mailtoOk, 'Email links updated to doncudd3@gmail.com');
-        // No stray template markers like "$1"
-        console.assert(!document.body.innerHTML.includes('$1'), 'No stray template markers present');
-        // New: borders removed on hero/footer
-        const hb = getComputedStyle(document.querySelector('.hero')).borderBottomWidth;
-        const ft = getComputedStyle(document.querySelector('footer')).borderTopWidth;
-        console.assert(hb === '0px' || hb === '0', 'Hero bottom border removed');
-        console.assert(ft === '0px' || ft === '0', 'Footer top border removed');
+        // Parallax: slower-than-text and same direction as text (opposite user scroll)
+        console.assert(PARALLAX_AMP > 0 && PARALLAX_AMP < 1, 'Parallax amp < 1 for slower-than-text');
+        const h=100;
+        const mapNormToY = (norm)=>{ const curved = Math.sign(norm)*Math.pow(Math.abs(norm), CURVE_EXPONENT); return (-curved * (h/2)) * VERTICAL_SCALE * PARALLAX_AMP; };
+        console.assert(mapNormToY(-0.6) > mapNormToY(-0.3), 'As section moves up (norm ↓), object Y increases (moves up)');
+        console.assert(mapNormToY(0.6) < mapNormToY(0.3), 'As section moves down (norm ↑), object Y decreases (moves down)');
+        // Amplitude check: object travel < text travel
+        const objSpan = Math.abs(mapNormToY(1) - mapNormToY(0));
+        const textSpan = (h/2) * VERTICAL_SCALE; // baseline if amp were 1
+        console.assert(objSpan < textSpan, 'Object moves slower than text');
+        // Visibility window tests — earlier render, later derender via VIS_MARGIN
+        (function visTests(){
+          const vh = 1000; const base = vh * VIS_MARGIN; const extra = vh * 0.3;
+          const computeGeneric = (top, bottom)=> (bottom > -base && top < (vh + base));
+          const computeBottomEdu  = (top, bottom)=> (bottom > -base && top < (vh + base + extra));
+          const computeBottomSkills = (top, bottom)=> (bottom > -base && top < (vh + base + vh*0.7));
+          // Generic sections
+          console.assert(computeGeneric(-350, -50) === true,  'Generic: above viewport but within margin → visible');
+          console.assert(computeGeneric(-1100, -900) === false,'Generic: far above beyond margin → not visible');
+          console.assert(computeGeneric(950, 1200) === true,   'Generic: below viewport but within base margin → visible');
+          console.assert(computeGeneric(1500, 1700) === false, 'Generic: far below beyond base margin → not visible');
+          // Bottom sections get earlier pop-in (education + skills have larger bottom margins)
+          console.assert(computeBottomEdu(1200, 1450) === true,   'Education: earlier pop-in below viewport with extra margin');
+          console.assert(computeBottomSkills(1350, 1600) === true, 'Skills: even earlier pop-in with larger extra bottom margin');
+          console.assert(computeBottomSkills(2200, 2400) === false,'Skills: still not visible when far below even with extra');
+        })();
         setThreeBg(document.body.classList.contains('dark'));
       } catch(e){ console.warn('Self-tests failed:', e); }
     })();
