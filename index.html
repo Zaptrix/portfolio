@@ -289,7 +289,13 @@
     }
     themeBtns.forEach(btn => btn.addEventListener('click', () => applyTheme(btn.dataset.theme)));
     window.matchMedia('(prefers-color-scheme: dark)')?.addEventListener('change', () => { if (localStorage.getItem('theme') === 'system') applyTheme('system'); });
-    applyTheme(localStorage.getItem('theme') || 'system');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light' || savedTheme === 'dark' || savedTheme === 'system') {
+      applyTheme(savedTheme);
+    } else {
+      // First visit: defer one frame so UI paints before toggling, then apply 'system'
+      requestAnimationFrame(() => applyTheme('system'));
+    }
     document.getElementById('print-btn')?.addEventListener('click', () => window.print());
 
     // ---------------------
@@ -429,6 +435,10 @@
         // Colors distinct
         const colors = groups.map(g => g.children[0].material.color.getHex());
         console.assert(new Set(colors).size === colors.length, 'Each shape has a unique color');
+        // Toggle reflects active theme (after first paint or stored mode)
+        const expected = localStorage.getItem('theme') || 'system';
+        const selected = (Array.from(document.querySelectorAll('.toggle-btn')).find(b => b.getAttribute('aria-pressed') === 'true')||{}).dataset?.theme;
+        console.assert(selected === expected || (expected === 'system' && selected === 'system'), 'Theme toggle reflects active mode');
         // Theme safe after lights
         setThreeBg(document.body.classList.contains('dark'));
       } catch(e){ console.warn('Self-tests failed:', e); }
