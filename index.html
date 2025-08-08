@@ -1,177 +1,438 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="src/css/style.css">
-    <style>
-        /* ==================== GLOBAL ==================== */
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Don Cuddihee — Portfolio</title>
+  <meta name="description" content="Portfolio of Don Cuddihee — AI‑curious support engineer & developer. Projects, experience, and contact." />
+  <meta name="color-scheme" content="light dark" />
+  <meta property="og:title" content="Don Cuddihee — Portfolio" />
+  <meta property="og:description" content="AI‑curious support engineer & developer. Projects, experience, and contact." />
+  <meta property="og:type" content="website" />
+  <style>
+    :root {
+      --bg: #f7f7f8;
+      --surface: #ffffff;
+      --text: #0b1220;
+      --muted: #5b6472;
+      --accent: #2563eb;
+      --accent-2: #0ea5e9;
+      --ring: rgba(37, 99, 235, .35);
+      --border: #e5e7eb;
+      --code: #111827;
+    }
+    .dark {
+      --bg: #0b0f14;
+      --surface: #0f141b;
+      --text: #e6e7ea;
+      --muted: #a5adba;
+      --accent: #60a5fa;
+      --accent-2: #22d3ee;
+      --ring: rgba(96, 165, 250, .35);
+      --border: #1f2630;
+      --code: #f9fafb;
+    }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { width: min(1100px, 92vw); margin: 0 auto; }
+    header {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: saturate(1.2) blur(8px);
+      background: color-mix(in oklab, var(--bg) 86%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav { display:flex; align-items:center; justify-content:space-between; padding: .8rem 0; }
+    .brand { font-weight: 700; letter-spacing:.2px; }
+    .nav a { margin-left: 1rem; font-weight: 600; }
 
-        /* ==================== HERO MESSAGE ==================== */
-        h1 {
-            margin-top: 2.5rem; /* space below top edge */
-            text-align: center;
-            font-size: 2.4rem;
-            line-height: 1.2;
-        }
+    .theme-toggle { display:flex; gap:.5rem; align-items:center; }
+    .toggle-group { display:inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: .25rem; }
+    .toggle-btn { border: 0; background: transparent; padding: .35rem .7rem; border-radius: 999px; cursor: pointer; color: var(--muted); font-weight: 600; }
+    .toggle-btn[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: 0 0 0 .2rem var(--ring) inset; }
 
-        /* ==================== THEME TOGGLE ==================== */
-        .theme-toggle {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            display: flex;
-            gap: 0.5rem;
-            z-index: 100;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(4px);
-            padding: 0.25rem 0.5rem;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.12);
-        }
-        .toggle-option {
-            border: none;
-            padding: 0.4rem 0.75rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            background: #e0e0e0;
-            transition: background 0.25s;
-        }
-        .toggle-option:hover { background: #d4d4d4; }
-        .toggle-option.active { background: #2196F3; color: #fff; }
+    /* Stage spans viewport (transparent, non-interactive) */
+    #stage { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+    #three-canvas { display:block; width:100%; height:100%; }
 
-        /* ==================== THREE.JS CONTAINER ==================== */
-        #three-js-container {
-            position: relative;
-            margin: 1rem auto 0 auto; /* small gap below heading */
-            width: 100vw;            /* span the full viewport width so renderer fits */
-            height: 60vh;            /* use 60% of viewport height – brings cube higher */
-            max-width: 100%;
-        }
-        #three-js-container canvas {
-            display: block; /* remove the width/height overrides so Three.js sets them */
-        }
+    /* Ensure content sits above the stage */
+    header, .hero, main, footer { position: relative; z-index: 1; }
 
-        /* ==================== RESUME SECTION ==================== */
-        #resume-section {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 2rem 1rem 4rem 1rem; /* reduce top padding so name sits closer to cube */
-            line-height: 1.5;
-        }
-        #resume-section h2 { font-size: 2.2rem; margin-bottom: 0.25rem; text-align: center; }
-        #resume-section h3 { font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.5rem; border-bottom: 2px solid #2196F3; display: inline-block; }
-        #resume-section h4 { font-size: 1.1rem; margin-bottom: 0.25rem; }
-        #resume-section ul { list-style: none; margin: 0 0 0.75rem 0; padding-left: 1.2rem; }
-        #resume-section li { margin-bottom: 0.35rem; }
-        .position-meta { font-style: italic; font-size: 0.95rem; display: block; margin-bottom: 0.25rem; }
-        .contact-links a { color: #2196F3; text-decoration: none; }
-        .contact-links a:hover { text-decoration: underline; }
-    </style>
+    .hero {
+      position: relative; isolation: isolate; overflow: clip;
+      display: grid; place-items: center; min-height: 48svh; border-bottom: 1px solid var(--border);
+      background: radial-gradient(1200px 600px at 70% -50%, color-mix(in oklab, var(--accent) 14%, transparent), transparent),
+                  radial-gradient(900px 400px at -20% 20%, color-mix(in oklab, var(--accent-2) 12%, transparent), transparent);
+    }
+    .hero-inner { text-align:center; padding: 3rem 0; }
+    .eyebrow { color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size:.8rem; }
+    .title { font-size: clamp(1.8rem, 4vw, 3rem); margin: .6rem 0; line-height:1.15; }
+    .subtitle { color: var(--muted); margin: .6rem auto 1.2rem; max-width: 65ch; }
+    .cta { display:flex; gap:.7rem; justify-content:center; flex-wrap: wrap; }
+    .btn { display:inline-flex; align-items:center; gap:.5rem; padding:.7rem 1rem; border-radius: 999px; border:1px solid var(--border); background: var(--surface); color: var(--text); font-weight:700; cursor:pointer; }
+    .btn.primary { background: var(--accent); color: white; border-color: color-mix(in oklab, var(--accent) 85%, black); }
+    .btn:hover { filter: brightness(1.04); text-decoration:none; }
+
+    main { padding: 2.25rem 0 3rem; }
+    section { padding: 2rem 0; }
+    h2 { font-size: clamp(1.3rem, 2.6vw, 1.8rem); margin: 0 0 1rem; }
+    .grid { display:grid; gap: 1rem; grid-template-columns: repeat(12, 1fr); }
+    .card { grid-column: span 12; border:1px solid var(--border); background: var(--surface); border-radius: 1rem; padding: 1rem; }
+    .card h3 { margin:.2rem 0 .5rem; }
+    .card p { margin:.3rem 0 .6rem; color: var(--muted); }
+    .card .meta { font-size: .9rem; color: var(--muted); }
+    @media (min-width: 720px){
+      .card.span-6 { grid-column: span 6; }
+      .card.span-4 { grid-column: span 4; }
+    }
+
+    .list { display:grid; gap:.6rem; padding-left:1.1rem; }
+    .list li { margin-left:.4rem; }
+
+    .skills { display:flex; gap:.5rem; flex-wrap: wrap; }
+    .chip { border:1px solid var(--border); background: var(--surface); border-radius: 999px; padding:.35rem .6rem; font-weight:600; color: var(--muted); }
+
+    footer { border-top:1px solid var(--border); padding: 1.4rem 0 3rem; color: var(--muted); }
+
+    .skip { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip:focus { position:static; width:auto; height:auto; padding:.6rem; background: var(--surface); border:1px solid var(--border); border-radius:.5rem; }
+
+    @media (max-width: 960px){
+      #stage { display:none; }
+    }
+
+    /* Print: make this double as a clean resume */
+    @media print {
+      #stage, header, .cta { display:none !important; }
+      body { background: white; color: #111; }
+      .card { break-inside: avoid; }
+    }
+  </style>
 </head>
 <body>
-    <!-- ==================== HERO SECTION ==================== -->
-    <h1>Welcome to My Portfolio</h1>
-
-    <!-- Three‑JS Cube -->
-    <div id="three-js-container"></div>
-
-    <!-- Theme Toggle -->
-    <div class="theme-toggle">
-        <button id="system-default" class="toggle-option active">System</button>
-        <button id="light-mode" class="toggle-option">Light</button>
-        <button id="dark-mode" class="toggle-option">Dark</button>
+  <a href="#content" class="skip">Skip to content</a>
+  <header>
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <div class="brand">Don Cuddihee</div>
+      <div class="theme-toggle" role="group" aria-label="Color theme">
+        <div class="toggle-group">
+          <button class="toggle-btn" data-theme="system" aria-pressed="true">System</button>
+          <button class="toggle-btn" data-theme="light" aria-pressed="false">Light</button>
+          <button class="toggle-btn" data-theme="dark" aria-pressed="false">Dark</button>
+        </div>
+      </div>
     </div>
+  </header>
 
-    <!-- ==================== RESUME SECTION ==================== -->
-    <section id="resume-section">
-        <h2>Don Cuddihee</h2>
-        <p class="contact-links">
-            <a href="mailto:doncudd3@gmail.com">doncudd3@gmail.com</a> &nbsp;|&nbsp;
-            <a href="https://zaptrix.github.io/portfolio/" target="_blank" rel="noopener">zaptrix.github.io/portfolio/</a> &nbsp;|&nbsp;
-            <a href="https://github.com/zaptrix" target="_blank" rel="noopener">github.com/zaptrix</a>
-        </p>
+  <!-- Full-viewport 3D stage -->
+  <div id="stage"><canvas id="three-canvas"></canvas></div>
 
-        <!-- ===== SUMMARY ===== -->
-        <h3>Summary</h3>
-        <p>
-            Technical support professional with a solid foundation in computer science and hands‑on experience building and analyzing AI‑driven solutions. Motivated to design, deploy, and maintain scalable ML models and applications while collaborating with cross‑functional teams to deliver robust, real‑time results.
-        </p>
+  <section class="hero">
+    <div class="hero-inner container">
+      <div class="eyebrow">Support Engineer • Developer • AI‑curious</div>
+      <h1 class="title">I build helpful systems and ship calm, reliable support.</h1>
+      <p class="subtitle">Technical support professional with a CS foundation and hands‑on AI/ML experience. I like shipping practical models and tools—designed, deployed, and maintained with clear docs and fast feedback loops to deliver robust, real‑time results.</p>
+      <div class="cta">
+        <a class="btn primary" href="mailto:doncuddi3@gmail.com">Email me</a>
+        <a class="btn" href="https://github.com/zaptrix" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="#experience">Experience</a>
+        <button class="btn" id="print-btn" type="button">Save as PDF</button>
+      </div>
+    </div>
+  </section>
 
-        <!-- ===== SKILLS ===== -->
-        <h3>Skills</h3>
-        <ul>
-            <li><strong>Programming:</strong> Python, C++, Java, JavaScript, VB.NET, SQL</li>
-            <li><strong>AI / ML (Personal):</strong> PyTorch, TensorFlow, Stable Diffusion</li>
-            <li><strong>DevOps &amp; Cloud:</strong> Git, Docker, FastAPI, AWS EC2/S3, Azure</li>
-            <li><strong>Security &amp; Networking:</strong> Wireshark, Nmap, PowerShell</li>
-            <li><strong>Platforms:</strong> Windows, macOS, Linux, Android</li>
-        </ul>
-
-        <!-- ===== PERSONAL PROJECTS ===== -->
-        <h3>Personal Projects</h3>
-        <h4>Stable Diffusion WebUI <span class="position-meta">2024</span></h4>
-        <ul>
-            <li>Configured WebUI for an RTX 5070 desktop GPU; generated <strong>2,000+ images</strong> from text prompts entirely offline.</li>
-            <li>Gained practical experience with Python environments, dependency management, and troubleshooting installation issues.</li>
-        </ul>
-
-        <h4>Local LLM <span class="position-meta">2024</span></h4>
-        <ul>
-            <li>Gained hands‑on experience with C++ build systems, Python scripting, and deploying AI models outside of cloud environments.</li>
-            <li>Conducted experiments with prompt engineering and model parameters to explore capabilities and limitations.</li>
-        </ul>
-
-        <h4>Pokémon GO IV‑Scanner Automation <span class="position-meta">2024</span></h4>
-        <ul>
-            <li>Used MacroDroid to automate scanning of Pokémon IVs.</li>
-            <li>Exported logs to CSV for analysis.</li>
-        </ul>
-
-        <!-- ===== PROFESSIONAL EXPERIENCE ===== -->
-        <h3>Professional Experience</h3>
-        <h4>Call Center Analyst, Agilant Solutions — Lisle, IL <span class="position-meta">Feb 2024 – Present</span></h4>
-        <ul>
-            <li>Resolve 35–40 technical tickets/day with ~99.4% call‑acceptance and &lt;1% abandonment; ranked top‑5 in etiquette (4.83/5).</li>
-            <li>Communicated system issues to leadership, honing skills in documentation and process alignment.</li>
-            <li>Adapted quickly to evolving technologies and workflows, supporting overall operational stability.</li>
-        </ul>
-
-        <h4>Help Desk Student Worker, College of DuPage — Glen Ellyn, IL <span class="position-meta">Sep 2021 – Dec 2022</span></h4>
-        <ul>
-            <li>Resolved support tickets for Windows and macOS lab systems, developing a systematic incident‑resolution workflow.</li>
-            <li>Logged fixes in ticketing software, improving knowledge‑base coverage and future issue triage.</li>
-        </ul>
-
-        <h4>Sales Associate (Various) <span class="position-meta">Jul 2018 – Sep 2021</span></h4>
-        <ul>
-            <li>Exceeded monthly sales targets by 15–20% through consultative selling of mobile and internet services.</li>
-            <li>Strengthened interpersonal communication skills.</li>
-        </ul>
-
-        <!-- ===== EDUCATION ===== -->
-        <h3>Education</h3>
-        <h4>Lewis University, Romeoville, IL — Bachelor of Science in Computer Science <span class="position-meta">2023</span></h4>
-        <p>GPA 3.42</p>
+  <main id="content" class="container" tabindex="-1">
+    <section id="projects" aria-labelledby="projects-h">
+      <h2 id="projects-h">Selected Projects</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <h3>Stable Diffusion WebUI (2024)</h3>
+          <p>Configured SD WebUI for an RTX 5070 and generated 2,000+ images entirely offline; wrestled CUDA/Python envs, pinned deps, and documented fixes.</p>
+          <p class="meta">Python, CUDA, SD WebUI. <span aria-hidden>•</span> Offline-first workflow.</p>
+        </article>
+        <article class="card span-6">
+          <h3>Local LLM Experiments (2024)</h3>
+          <p>Built/runs local models; practiced C++ build systems + Python scripting, played with prompting and parameter sweeps to map capability limits.</p>
+          <p class="meta">C++ toolchains, Python, quantization, prompt/params.</p>
+        </article>
+        <article class="card span-6">
+          <h3>Pokémon GO IV‑Scanner Automation (2024)</h3>
+          <p>Automated IV scans with MacroDroid and exported logs to CSV for analysis dashboards.</p>
+          <p class="meta">Android (MacroDroid), CSV processing.</p>
+        </article>
+        <article class="card span-6">
+          <h3>Three.js Playground</h3>
+          <p>Theme‑aware scenes (like the header) optimized for responsiveness and a11y.</p>
+          <p class="meta">Three.js, accessibility.</p>
+        </article>
+      </div>
     </section>
 
-    <!-- ==================== OTHER CONTENT (placeholders) ==================== -->
-    <section id="about"></section>
-    <section id="skills"></section>
-    <section id="projects"></section>
-    <section id="experience"></section>
-    <section id="contact"></section>
+    <section id="experience" aria-labelledby="exp-h">
+      <h2 id="exp-h">Experience</h2>
+      <article class="card">
+        <h3>Call Center Analyst — Agilant Solutions</h3>
+        <p class="meta">Lisle, IL • Feb 2024 – Present</p>
+        <ul class="list">
+          <li>Resolve ~35–40 technical tickets/day with ~99.4% call‑acceptance and &lt;1% abandonment; top‑5 etiquette (4.83/5).</li>
+          <li>Escalated/system issues documented clearly for leadership; improved process alignment and reliability.</li>
+          <li>Adapt quickly to evolving tools/workflows while maintaining operational stability.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Help Desk Student Worker — College of DuPage</h3>
+        <p class="meta">Glen Ellyn, IL • Sep 2021 – Dec 2022</p>
+        <ul class="list">
+          <li>Supported Windows &amp; macOS lab systems; developed a systematic incident‑resolution workflow.</li>
+          <li>Logged fixes in ticketing software, improving KB coverage and future triage.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>Sales Associate — (Various)</h3>
+        <p class="meta">Jul 2018 – Sep 2021</p>
+        <ul class="list">
+          <li>Exceeded monthly sales targets by ~15–20% via consultative selling (mobile/internet services).</li>
+          <li>Strengthened interpersonal communication; reduced returns through pre‑purchase troubleshooting.</li>
+        </ul>
+      </article>
+    </section>
 
-    <!-- ==================== SCRIPTS ==================== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="src/js/app.js"></script>
-    <script src="src/js/theme-toggle.js"></script>
+    <section id="skills" aria-labelledby="skills-h">
+      <h2 id="skills-h">Skills</h2>
+      <div class="card">
+        <div class="skills">
+          <span class="chip">Python</span>
+          <span class="chip">C++</span>
+          <span class="chip">Java</span>
+          <span class="chip">JavaScript</span>
+          <span class="chip">VB.NET</span>
+          <span class="chip">SQL</span>
+          <span class="chip">PyTorch</span>
+          <span class="chip">TensorFlow</span>
+          <span class="chip">Stable Diffusion</span>
+          <span class="chip">Git</span>
+          <span class="chip">Docker</span>
+          <span class="chip">FastAPI</span>
+          <span class="chip">AWS EC2/S3</span>
+          <span class="chip">Azure</span>
+          <span class="chip">Wireshark</span>
+          <span class="chip">Nmap</span>
+          <span class="chip">PowerShell</span>
+          <span class="chip">Windows</span>
+          <span class="chip">macOS</span>
+          <span class="chip">Linux</span>
+          <span class="chip">Android</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" aria-labelledby="edu-h">
+      <h2 id="edu-h">Education</h2>
+      <div class="card">
+        <strong>BS, Computer Science — Lewis University (2023)</strong>
+        <div class="meta">GPA 3.42</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div><strong>Don Cuddihee</strong> • <a href="mailto:doncuddi3@gmail.com">doncuddi3@gmail.com</a> • <a href="https://github.com/zaptrix" target="_blank" rel="noopener">github.com/zaptrix</a></div>
+    </div>
+  </footer>
+
+  <!-- Three.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // ---------------------
+    // Globals & utilities
+    // ---------------------
+    let renderer = null;
+    let scene, camera;
+    const stage = document.getElementById('stage');
+    const canvas = document.getElementById('three-canvas');
+
+    // Lights declared up-front to avoid TDZ when theme applies
+    let lights = null;
+    function updateLightColors(dark){
+      if (!lights || !lights.hemi) return;
+      lights.hemi.color.setHex(dark ? 0xbfd8ff : 0xffffff);
+      lights.hemi.groundColor.setHex(dark ? 0x20242a : 0x222222);
+      lights.key.intensity = dark ? 0.8 : 0.7;
+      lights.p1.intensity = dark ? 55 : 45;
+      lights.p2.intensity = dark ? 55 : 45;
+    }
+
+    function setThreeBg(dark){
+      if (renderer) {
+        const hex = dark ? 0x0b0f14 : 0xf7f7f8;
+        renderer.setClearColor(hex, 0); // transparent so page bg shows
+      }
+      updateLightColors(dark); // safe no-op until lights are built
+    }
+
+    // Theme handling
+    const themeBtns = Array.from(document.querySelectorAll('.toggle-btn'));
+    function systemDark(){ return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
+    function applyTheme(mode){
+      localStorage.setItem('theme', mode);
+      const dark = mode === 'dark' || (mode === 'system' && systemDark());
+      document.body.classList.toggle('dark', dark);
+      themeBtns.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.theme === mode)));
+      setThreeBg(dark);
+    }
+    themeBtns.forEach(btn => btn.addEventListener('click', () => applyTheme(btn.dataset.theme)));
+    window.matchMedia('(prefers-color-scheme: dark)')?.addEventListener('change', () => { if (localStorage.getItem('theme') === 'system') applyTheme('system'); });
+    applyTheme(localStorage.getItem('theme') || 'system');
+    document.getElementById('print-btn')?.addEventListener('click', () => window.print());
+
+    // ---------------------
+    // Three.js scene setup
+    // ---------------------
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
+    camera.position.set(0, 0, 6);
+
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      if (renderer.outputEncoding !== undefined) renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.physicallyCorrectLights = true;
+      setThreeBg(document.body.classList.contains('dark'));
+    } catch(e){
+      console.error('WebGL init failed:', e); stage.style.display = 'none';
+    }
+
+    // Dynamic lighting
+    function buildLights(){
+      lights = { hemi:null, key:null, p1:null, p2:null };
+      lights.hemi = new THREE.HemisphereLight(0xffffff, 0x101010, 0.5);
+      lights.key = new THREE.DirectionalLight(0xffffff, 0.7);
+      lights.key.position.set(5, 8, 6);
+      lights.p1 = new THREE.PointLight(0xff66cc, 40, 20); // hot pink
+      lights.p2 = new THREE.PointLight(0x66ccff, 40, 20); // cyan
+      scene.add(lights.hemi, lights.key, lights.p1, lights.p2);
+      updateLightColors(document.body.classList.contains('dark'));
+    }
+    buildLights();
+
+    // ---------- Objects that follow sections (unique polygonal shapes) ----------
+    const anchors = [
+      { id: 'projects',   side: +1, kind: 'dode',   color: 0x7c4dff }, // violet dodecahedron
+      { id: 'experience', side: -1, kind: 'icosa',  color: 0x00e5ff }, // cyan icosahedron
+      { id: 'skills',     side: +1, kind: 'octa',   color: 0xff2d55 }, // magenta octahedron
+      { id: 'education',  side: -1, kind: 'tetra',  color: 0xffb000 }  // amber tetrahedron
+    ];
+    const groups = [];
+
+    function polyMaterial(hex){
+      return new THREE.MeshStandardMaterial({ color: hex, metalness: 0.25, roughness: 0.55, flatShading: true });
+    }
+
+    function buildFor(anchor){
+      const g = new THREE.Group();
+      let geom;
+      switch(anchor.kind){
+        case 'dode':  geom = new THREE.DodecahedronGeometry(0.95, 0); break;
+        case 'icosa': geom = new THREE.IcosahedronGeometry(0.95, 0);  break;
+        case 'octa':  geom = new THREE.OctahedronGeometry(0.95, 0);   break;
+        case 'tetra': geom = new THREE.TetrahedronGeometry(0.95, 0);  break;
+        default:      geom = new THREE.BoxGeometry(1.1, 1.1, 1.1);    break;
+      }
+      const mesh = new THREE.Mesh(geom, polyMaterial(anchor.color));
+      g.add(mesh);
+      scene.add(g);
+      g.userData = { el: document.getElementById(anchor.id), side: anchor.side, rot: (Math.random()*0.003 + 0.001) * (Math.random()<0.5?-1:1), kind: anchor.kind };
+      groups.push(g);
+    }
+    anchors.forEach(buildFor);
+
+    // Map DOM Y to world Y
+    function frustum(){
+      const size = renderer.getSize(new THREE.Vector2());
+      const aspect = size.x / Math.max(1,size.y);
+      const vFOV = (THREE.MathUtils? THREE.MathUtils.degToRad(camera.fov) : (Math.PI/180)*camera.fov);
+      const height = 2 * Math.tan(vFOV/2) * camera.position.z;
+      const width = height * aspect;
+      return { width, height };
+    }
+
+    function updateGroupPositions(){
+      const { width, height } = frustum();
+      const container = document.querySelector('.container');
+      const contPx = container ? container.getBoundingClientRect().width : Math.min(1100, window.innerWidth*0.92);
+      const contWorld = width * (contPx / Math.max(1, window.innerWidth));
+      const sideBand = (width - contWorld) / 2; // world width available outside container on each side
+      const targetFromCenter = contWorld/2 + sideBand*0.6; // place 60% into side band
+      const sideX = (s)=> s * targetFromCenter;
+
+      for (const g of groups){
+        const el = g.userData.el; if (!el) continue;
+        const r = el.getBoundingClientRect();
+        const centerY = r.top + r.height*0.3; // a bit above center
+        const norm = (centerY / window.innerHeight) * 2 - 1; // -1 top, +1 bottom
+        g.position.y = -norm * (height/2);
+        g.position.x = sideX(g.userData.side);
+        g.visible = r.bottom > 0 && r.top < window.innerHeight*1.1; // show near viewport
+      }
+    }
+
+    function resize(){
+      const rect = stage.getBoundingClientRect();
+      renderer.setSize(rect.width, rect.height, false);
+      camera.aspect = rect.width / Math.max(1, rect.height);
+      camera.updateProjectionMatrix();
+      updateGroupPositions();
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function onScroll(){ updateGroupPositions(); }
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+
+    // Animation loop (lights move dynamically)
+    function tick(){
+      const t = performance.now() * 0.001;
+      if (lights && lights.p1) lights.p1.position.set(Math.sin(t)*4.2, Math.cos(t*0.6)*2.2, 2.8);
+      if (lights && lights.p2) lights.p2.position.set(Math.cos(t*0.8)*-3.6, Math.sin(t*1.1)*3.0, 1.8);
+      for (const g of groups){ g.rotation.y += g.userData.rot; g.rotation.x += g.userData.rot*0.4; }
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    }
+    tick();
+
+    // ---------------------
+    // Lightweight self-tests (dev only)
+    // ---------------------
+    (function selfTests(){
+      try {
+        console.assert(!!document.querySelector('#three-canvas'), 'Canvas exists');
+        console.assert(renderer instanceof THREE.WebGLRenderer, 'Renderer initialized');
+        console.assert(groups.length === 4, 'Four anchor groups created');
+        console.assert(lights && lights.hemi && lights.key, 'Lights initialized');
+        updateGroupPositions();
+        console.assert(groups.every(g => Number.isFinite(g.position.y)), 'World Y is finite');
+        // Alternating sides: x * side should be > 0 (correct side)
+        console.assert(groups.every(g => (g.position.x * g.userData.side) > 0), 'Objects alternate left/right correctly');
+        // Unique geometry types
+        const types = groups.map(g => g.children[0].geometry.type);
+        console.assert(new Set(types).size === types.length, 'All shapes are unique');
+        // Flat shading applied
+        console.assert(groups.every(g => g.children[0].material.flatShading === true), 'Flat-shaded polygonal materials');
+        // Colors distinct
+        const colors = groups.map(g => g.children[0].material.color.getHex());
+        console.assert(new Set(colors).size === colors.length, 'Each shape has a unique color');
+        // Theme safe after lights
+        setThreeBg(document.body.classList.contains('dark'));
+      } catch(e){ console.warn('Self-tests failed:', e); }
+    })();
+  </script>
 </body>
 </html>
