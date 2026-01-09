@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Don Cuddihee — Portfolio</title>
-  <meta name="description" content="Portfolio of Don Cuddihee — AI‑curious support engineer & developer. Projects, experience, and contact." />
+  <meta name="description" content="Portfolio of Don Cuddihee — entry-level software engineer / QA engineer. Projects, experience, and contact." />
   <meta name="color-scheme" content="light dark" />
   <meta property="og:title" content="Don Cuddihee — Portfolio" />
-  <meta property="og:description" content="AI‑curious support engineer & developer. Projects, experience, and contact." />
+  <meta property="og:description" content="Entry-level software engineer / QA engineer. Projects, experience, and contact." />
   <meta property="og:type" content="website" />
   <style>
     :root {
@@ -139,14 +139,17 @@
 
   <section class="hero">
     <div class="hero-inner container">
-      <div class="eyebrow">Support Engineer • Developer • AI‑curious</div>
-      <h1 class="title">I build helpful systems and ship calm, reliable support.</h1>
-      <p class="subtitle">Technical support professional with a CS foundation and hands‑on AI/ML experience. I like shipping practical models and tools—designed, deployed, and maintained with clear docs and fast feedback loops to deliver robust, real‑time results.</p>
+      <div class="eyebrow">Entry-level Software Engineer • QA Engineer • AI tooling</div>
+      <h1 class="title">I build reliable, testable workflows—and document them clearly.</h1>
+      <p class="subtitle">
+        Entry-level Software Engineer / QA Engineer (B.S. Computer Science, 2023) focused on reliable, testable workflows and documented process improvements.
+        I evaluate local AI tooling and translate findings into repeatable setups, troubleshooting notes, and clear documentation.
+      </p>
       <div class="cta">
         <a class="btn primary" href="mailto:doncudd3@gmail.com">Email me</a>
-        <a class="btn" href="https://github.com/zaptrix" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="#projects">Projects</a>
         <a class="btn" href="#experience">Experience</a>
-        <a class="btn" id="resume-btn" href="Resume%207_14_2025.pdf" download>Download Resume (PDF)</a>
+        <a class="btn" id="resume-btn" href="Resume.pdf" download>Download Resume (PDF)</a>
       </div>
     </div>
   </section>
@@ -156,53 +159,58 @@
       <h2 id="projects-h">Selected Projects</h2>
       <div class="grid">
         <article class="card span-6">
-          <h3>Stable Diffusion WebUI (2024)</h3>
-          <p>Configured SD WebUI for an RTX 5070 and generated 2,000+ images entirely offline; wrestled CUDA/Python envs, pinned deps, and documented fixes.</p>
-          <p class="meta">Python, CUDA, SD WebUI. <span aria-hidden>•</span> Offline-first workflow.</p>
+          <h3>Local LLM Evaluation (llama.cpp) (2024)</h3>
+          <p>Compared local LLMs and quantizations via llama.cpp under consumer hardware constraints (12GB VRAM / 64GB RAM) and captured repeatable run configurations.</p>
+          <p class="meta">llama.cpp, C++ toolchains, quantization. <span aria-hidden>•</span> Repeatable configs + evaluation notes.</p>
         </article>
+
         <article class="card span-6">
-          <h3>Local LLM Experiments (2024)</h3>
-          <p>Built/runs local models; practiced C++ build systems + Python scripting, played with prompting and parameter sweeps to map capability limits.</p>
-          <p class="meta">C++ toolchains, Python, quantization, prompt/params.</p>
+          <h3>Local Image Generation Workflows (ComfyUI) (2024)</h3>
+          <p>Built and iterated node-based workflows with Flux Kontext and Z-Image Turbo; standardized model organization around SafeTensors and LoRAs/model patches (avoiding unsafe checkpoint formats).</p>
+          <p class="meta">ComfyUI, Flux Kontext, Z-Image Turbo. <span aria-hidden>•</span> SafeTensors + LoRA/model patches.</p>
         </article>
+
         <article class="card span-6">
-          <h3>Pokémon GO IV‑Scanner Automation (2024)</h3>
-          <p>Automated IV scans with MacroDroid and exported logs to CSV for analysis dashboards.</p>
-          <p class="meta">Android (MacroDroid), CSV processing.</p>
+          <h3>AI Coding Reliability Tests (2025)</h3>
+          <p>Generated small playable games (e.g., Minesweeper, Snake) from single prompts using Cursor and Google Antigravity; tracked recurring failure modes and manual pass/fail checks.</p>
+          <p class="meta">Prompting, debugging, QA mindset. <span aria-hidden>•</span> Failure-mode tracking.</p>
         </article>
+
         <article class="card span-6">
-          <h3>Three.js Playground</h3>
-          <p>Theme‑aware scenes (like the header) optimized for responsiveness and a11y.</p>
-          <p class="meta">Three.js, accessibility.</p>
+          <h3>Interactive Portfolio Website (Three.js) (2024)</h3>
+          <p>Designed and built this portfolio with interactive 3D visuals and responsive UI, with project writeups intended to make work easy to evaluate.</p>
+          <p class="meta">Three.js, responsive UI, accessibility-aware design.</p>
         </article>
       </div>
     </section>
 
     <section id="experience" aria-labelledby="exp-h">
       <h2 id="exp-h">Experience</h2>
+
       <article class="card">
         <h3>Call Center Analyst — Agilant Solutions</h3>
-        <p class="meta">Lisle, IL • Feb 2024 – Present</p>
+        <p class="meta">Lisle, IL • Feb 2024 – Dec 2025</p>
         <ul class="list">
-          <li>Resolve ~35–40 technical tickets/day with ~99.4% call‑acceptance and &lt;1% abandonment; top‑5 etiquette (4.83/5).</li>
-          <li>Escalated/system issues documented clearly for leadership; improved process alignment and reliability.</li>
-          <li>Adapt quickly to evolving tools/workflows while maintaining operational stability.</li>
+          <li>Delivered first-line technical support (Windows/software/network); reproduced issues and escalated with clear steps, environment details, and outcomes.</li>
+          <li>Authored knowledgebase/documentation improvements to standardize troubleshooting and reduce ambiguity; content later leveraged in an AI-first-contact flow for basic troubleshooting.</li>
+          <li>Recommended dashboard alerting improvements (audio/visual notifications) implemented by a partner team to improve response consistency.</li>
         </ul>
       </article>
+
       <article class="card">
         <h3>Help Desk Student Worker — College of DuPage</h3>
         <p class="meta">Glen Ellyn, IL • Sep 2021 – Dec 2022</p>
         <ul class="list">
-          <li>Supported Windows &amp; macOS lab systems; developed a systematic incident‑resolution workflow.</li>
-          <li>Logged fixes in ticketing software, improving KB coverage and future triage.</li>
+          <li>Resolved Level 1–3 tickets using structured troubleshooting and root-cause isolation; maintained clear ticket notes for handoffs.</li>
+          <li>Trained new hires on triage workflow and customer communication to support consistent service quality.</li>
         </ul>
       </article>
+
       <article class="card">
         <h3>Sales Associate — (Various)</h3>
         <p class="meta">Jul 2018 – Sep 2021</p>
         <ul class="list">
-          <li>Exceeded monthly sales targets by ~15–20% via consultative selling (mobile/internet services).</li>
-          <li>Strengthened interpersonal communication; reduced returns through pre‑purchase troubleshooting.</li>
+          <li>Developed strong customer communication skills by translating product details into clear recommendations and next steps.</li>
         </ul>
       </article>
     </section>
@@ -210,28 +218,36 @@
     <section id="skills" aria-labelledby="skills-h">
       <h2 id="skills-h">Skills</h2>
       <div class="card">
-        <div class="skills">
+        <div class="skills" aria-label="Skills list">
+          <!-- Primary -->
           <span class="chip">Python</span>
           <span class="chip">C++</span>
-          <span class="chip">Java</span>
           <span class="chip">JavaScript</span>
-          <span class="chip">VB.NET</span>
+
+          <!-- Working -->
           <span class="chip">SQL</span>
-          <span class="chip">PyTorch</span>
-          <span class="chip">TensorFlow</span>
-          <span class="chip">Stable Diffusion</span>
+          <span class="chip">Java</span>
+          <span class="chip">PowerShell</span>
+
+          <!-- AI/ML Tooling -->
+          <span class="chip">llama.cpp</span>
+          <span class="chip">ComfyUI</span>
+          <span class="chip">Flux Kontext</span>
+          <span class="chip">Z-Image Turbo</span>
+          <span class="chip">SafeTensors</span>
+          <span class="chip">LoRA / model patches</span>
+
+          <!-- Tools/Platforms -->
           <span class="chip">Git</span>
-          <span class="chip">Docker</span>
-          <span class="chip">FastAPI</span>
-          <span class="chip">AWS EC2/S3</span>
-          <span class="chip">Azure</span>
+          <span class="chip">Windows</span>
+          <span class="chip">Linux</span>
           <span class="chip">Wireshark</span>
           <span class="chip">Nmap</span>
-          <span class="chip">PowerShell</span>
-          <span class="chip">Windows</span>
-          <span class="chip">macOS</span>
-          <span class="chip">Linux</span>
-          <span class="chip">Android</span>
+          <span class="chip">LaTeX</span>
+
+          <!-- Web -->
+          <span class="chip">Three.js</span>
+          <span class="chip">Responsive UI</span>
         </div>
       </div>
     </section>
@@ -239,15 +255,15 @@
     <section id="education" aria-labelledby="edu-h">
       <h2 id="edu-h">Education</h2>
       <div class="card">
-        <strong>BS, Computer Science — Lewis University (2023)</strong>
-        <div class="meta">GPA 3.42</div>
+        <strong>BS, Computer Science — Lewis University</strong>
+        <div class="meta">Selected coursework: Data Structures &amp; Algorithms, Software Engineering, Operating Systems, Databases</div>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="container">
-      <div><strong>Don Cuddihee</strong> • <a href="mailto:doncudd3@gmail.com">doncudd3@gmail.com</a> • <a href="https://github.com/zaptrix" target="_blank" rel="noopener">github.com/zaptrix</a></div>
+      <div><strong>Don Cuddihee</strong> • <a href="mailto:doncudd3@gmail.com">doncudd3@gmail.com</a></div>
     </div>
   </footer>
 
@@ -465,7 +481,7 @@
         console.assert(resume && /\.pdf(\?|$)/i.test(resume.getAttribute('href')), 'Resume download button points to a PDF');
         // Email links updated
         const mailtoOk = Array.from(document.querySelectorAll('a[href^="mailto:"]')).every(a => a.getAttribute('href').includes('doncudd3@gmail.com'));
-        console.assert(mailtoOk, 'Email links updated to doncudd3@gmail.com');
+        console.assert(mailtoOk, 'Email links updated to donccudd3@gmail.com');
         // Parallax: slower-than-text and same direction as text (opposite user scroll)
         console.assert(PARALLAX_AMP > 0 && PARALLAX_AMP < 1, 'Parallax amp < 1 for slower-than-text');
         const h=100;
