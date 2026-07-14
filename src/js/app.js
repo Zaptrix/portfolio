@@ -1,50 +1,91 @@
-// Initialize the scene, camera, and renderer
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById('three-js-container').appendChild(renderer.domElement);
+(() => {
+  "use strict";
 
-// Export the renderer
-window.renderer = renderer;
+  const doc = document.documentElement;
+  const header = document.querySelector("[data-header]");
+  const menuButton = document.querySelector(".menu-toggle");
+  const navigation = document.querySelector(".site-nav");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
+  const themeButtons = [...document.querySelectorAll("[data-theme-choice]")];
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
 
-// Set the initial background color
-renderer.setClearColor(0xf0f0f0); // Default to light grey background
+  doc.classList.add("js");
 
-// Add a light source
-const ambientLight = new THREE.AmbientLight(0x404040, 2); // Soft white light
-scene.add(ambientLight);
+  const applyTheme = (preference, persist = true) => {
+    const safePreference = ["system", "light", "dark"].includes(preference) ? preference : "system";
+    const resolvedTheme = safePreference === "system" ? (colorScheme.matches ? "dark" : "light") : safePreference;
 
-const pointLight = new THREE.PointLight(0xffffff, 1, 100);
-pointLight.position.set(10, 10, 10);
-scene.add(pointLight);
+    doc.dataset.themePreference = safePreference;
+    doc.dataset.theme = resolvedTheme;
+    themeMeta?.setAttribute("content", resolvedTheme === "dark" ? "#070707" : "#f0eee7");
+    themeButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.themeChoice === safePreference));
+    });
 
-// Create a cube with a material that responds to light
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshStandardMaterial({ color: 0x00ff00 }); // Standard material for lighting
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+    if (persist) {
+      try { localStorage.setItem("portfolio-theme", safePreference); } catch (_) { /* Storage can be unavailable in hardened browsers. */ }
+    }
 
-// Position the camera
-camera.position.z = 5;
+    window.dispatchEvent(new CustomEvent("portfolio-themechange", {
+      detail: { preference: safePreference, theme: resolvedTheme }
+    }));
+  };
 
-// Create the animation loop
-function animate() {
-    requestAnimationFrame(animate);
+  applyTheme(doc.dataset.themePreference || "system", false);
+  themeButtons.forEach((button) => {
+    button.addEventListener("click", () => applyTheme(button.dataset.themeChoice));
+  });
+  colorScheme.addEventListener?.("change", () => {
+    if (doc.dataset.themePreference === "system") applyTheme("system", false);
+  });
 
-    // Rotate the cube
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+  document.querySelectorAll("[data-year]").forEach((node) => {
+    node.textContent = new Date().getFullYear();
+  });
 
-    renderer.render(scene, camera);
-}
+  const updateScrollState = () => {
+    const scrollable = Math.max(1, doc.scrollHeight - window.innerHeight);
+    doc.style.setProperty("--scroll", Math.min(1, window.scrollY / scrollable));
+    header?.classList.toggle("is-scrolled", window.scrollY > 24);
+  };
 
-// Start the animation loop
-animate();
+  updateScrollState();
+  window.addEventListener("scroll", updateScrollState, { passive: true });
+  window.addEventListener("resize", updateScrollState, { passive: true });
 
-// Handle window resize
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});
+  const setMenu = (open) => {
+    if (!menuButton || !navigation) return;
+    menuButton.setAttribute("aria-expanded", String(open));
+    navigation.classList.toggle("is-open", open);
+    document.body.style.overflow = open ? "hidden" : "";
+  };
+
+  menuButton?.addEventListener("click", () => {
+    setMenu(menuButton.getAttribute("aria-expanded") !== "true");
+  });
+
+  navigation?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setMenu(false));
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setMenu(false);
+  });
+
+  const revealNodes = [...document.querySelectorAll(".reveal")];
+  if (reduceMotion.matches || !("IntersectionObserver" in window)) {
+    revealNodes.forEach((node) => node.classList.add("is-visible"));
+  } else {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -8%", threshold: 0.1 });
+
+    revealNodes.forEach((node) => revealObserver.observe(node));
+  }
+
+})();

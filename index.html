@@ -1,503 +1,273 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Don Cuddihee — Portfolio</title>
-  <meta name="description" content="Portfolio of Don Cuddihee — entry-level software engineer / QA engineer. Projects, experience, and contact." />
-  <meta name="color-scheme" content="light dark" />
-  <meta property="og:title" content="Don Cuddihee — Portfolio" />
-  <meta property="og:description" content="Entry-level software engineer / QA engineer. Projects, experience, and contact." />
-  <meta property="og:type" content="website" />
-  <style>
-    :root {
-      --bg: #f7f7f8;
-      --surface: #ffffff;
-      --text: #0b1220;
-      --muted: #5b6472;
-      --accent: #2563eb;
-      --accent-2: #0ea5e9;
-      --ring: rgba(37, 99, 235, .35);
-      --border: #e5e7eb;
-      --code: #111827;
-    }
-    .dark {
-      --bg: #0b0f14;
-      --surface: #0f141b;
-      --text: #e6e7ea;
-      --muted: #a5adba;
-      --accent: #60a5fa;
-      --accent-2: #22d3ee;
-      --ring: rgba(96, 165, 250, .35);
-      --border: #1f2630;
-      --code: #f9fafb;
-    }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-      background: var(--bg);
-      color: var(--text);
-    }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .container { width: min(1100px, 92vw); margin: 0 auto; }
-    header {
-      position: sticky; top: 0; z-index: 50;
-      backdrop-filter: saturate(1.2) blur(8px);
-      background: color-mix(in oklab, var(--bg) 86%, transparent);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav { display:flex; align-items:center; justify-content:space-between; padding: .8rem 0; }
-    .brand { font-weight: 700; letter-spacing:.2px; }
-    .nav a { margin-left: 1rem; font-weight: 600; }
-
-    .theme-toggle { display:flex; gap:.5rem; align-items:center; }
-    .toggle-group { display:inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: .25rem; }
-    .toggle-btn { border: 0; background: transparent; padding: .35rem .7rem; border-radius: 999px; cursor: pointer; color: var(--muted); font-weight: 600; }
-    .toggle-btn[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: 0 0 0 .2rem var(--ring) inset; }
-
-    /* Stage spans viewport (transparent, non-interactive) */
-    #stage { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
-    #three-canvas { display:block; width:100%; height:100%; }
-
-    /* Ensure content sits above the stage */
-    header, .hero, main, footer { position: relative; z-index: 1; }
-
-    .hero {
-      position: relative; isolation: isolate; overflow: clip;
-      display: grid; place-items: center; min-height: 48svh;
-      background: radial-gradient(1200px 600px at 70% -50%, color-mix(in oklab, var(--accent) 14%, transparent), transparent),
-                  radial-gradient(900px 400px at -20% 20%, color-mix(in oklab, var(--accent-2) 12%, transparent), transparent);
-    }
-    .hero-inner { text-align:center; padding: 3rem 0; }
-    .eyebrow { color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .12em; font-size:.8rem; }
-    .title { font-size: clamp(1.8rem, 4vw, 3rem); margin: .6rem 0; line-height:1.15; }
-    .subtitle { color: var(--muted); margin: .6rem auto 1.2rem; max-width: 65ch; }
-    .cta { display:flex; gap:.7rem; justify-content:center; flex-wrap: wrap; }
-    .btn { display:inline-flex; align-items:center; gap:.5rem; padding:.7rem 1rem; border-radius: 999px; border:1px solid var(--border); background: var(--surface); color: var(--text); font-weight:700; cursor:pointer; }
-    .btn.primary { background: var(--accent); color: white; border-color: color-mix(in oklab, var(--accent) 85%, black); }
-    .btn:hover { filter: brightness(1.04); text-decoration:none; }
-
-    main { padding: 2.25rem 0 3rem; }
-    section { padding: 2rem 0; }
-    h2 { font-size: clamp(1.3rem, 2.6vw, 1.8rem); margin: 0 0 1rem; }
-    .grid { display:grid; gap: 1rem; grid-template-columns: repeat(12, 1fr); }
-    .card { grid-column: span 12; border:1px solid var(--border); background: var(--surface); border-radius: 1rem; padding: 1rem; }
-    .card h3 { margin:.2rem 0 .5rem; }
-    .card p { margin:.3rem 0 .6rem; color: var(--muted); }
-    .card .meta { font-size: .9rem; color: var(--muted); }
-    @media (min-width: 720px){
-      .card.span-6 { grid-column: span 6; }
-      .card.span-4 { grid-column: span 4; }
-    }
-
-    .list { display:grid; gap:.6rem; padding-left:1.1rem; }
-    .list li { margin-left:.4rem; }
-
-    .skills { display:flex; gap:.5rem; flex-wrap: wrap; }
-    .chip { border:1px solid var(--border); background: var(--surface); border-radius: 999px; padding:.35rem .6rem; font-weight:600; color: var(--muted); }
-
-    footer { padding: 1.4rem 0 3rem; color: var(--muted); }
-
-    .skip { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
-    .skip:focus { position:static; width:auto; height:auto; padding:.6rem; background: var(--surface); border:1px solid var(--border); border-radius:.5rem; }
-
-    @media (max-width: 960px){
-      #stage { display:none; }
-    }
-
-    /* Print: make this double as a clean resume */
-    @media print {
-      #stage, header, .cta { display:none !important; }
-      body { background: white; color: #111; }
-      .card { break-inside: avoid; }
-    }
-
-    /* Remove horizontal dividers per request */
-    .hero { border-bottom: 0 !important; }
-    footer { border-top: 0 !important; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070707">
+  <meta name="color-scheme" content="dark light">
+  <title>Don Cuddihee — Developer, Troubleshooter &amp; Designer</title>
+  <meta name="description" content="Don Cuddihee builds software, web experiences, AI systems, and reliable technical workflows across local, remote, and networked environments.">
+  <meta property="og:title" content="Don Cuddihee — Systems with a pulse">
+  <meta property="og:description" content="Software, AI, troubleshooting, networking, and design — built to work together.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zaptrix.github.io/portfolio/">
+  <meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://zaptrix.github.io/portfolio/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23070707'/%3E%3Cpath d='M14 14h17c13 0 21 7 21 18S44 50 31 50H14V14Zm12 10v16h5c6 0 9-3 9-8s-3-8-9-8h-5Z' fill='%23c8ff00'/%3E%3C/svg%3E">
+  <script>
+    (() => {
+      try {
+        const requested = new URLSearchParams(location.search).get("theme");
+        const preference = ["system", "light", "dark"].includes(requested)
+          ? requested
+          : (localStorage.getItem("portfolio-theme") || "system");
+        const dark = preference === "dark" || (preference === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        document.documentElement.dataset.themePreference = preference;
+      } catch (_) {
+        document.documentElement.dataset.theme = "dark";
+        document.documentElement.dataset.themePreference = "system";
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="src/css/style.css">
+  <script src="src/js/app.js" defer></script>
 </head>
 <body>
-  <a href="#content" class="skip">Skip to content</a>
-  <header>
-    <div class="container nav" role="navigation" aria-label="Primary">
-      <div class="brand">Don Cuddihee</div>
-      <div class="theme-toggle" role="group" aria-label="Color theme">
-        <div class="toggle-group">
-          <button class="toggle-btn" data-theme="system" aria-pressed="true">System</button>
-          <button class="toggle-btn" data-theme="light" aria-pressed="false">Light</button>
-          <button class="toggle-btn" data-theme="dark" aria-pressed="false">Dark</button>
-        </div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <header class="site-header" data-header>
+    <a class="brand" href="#top" aria-label="Don Cuddihee — home">
+      <span class="brand-mark">DC</span>
+      <span class="brand-copy">Don Cuddihee<br><em>Systems + Design</em></span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+      <a href="#work">Work</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#experience">Experience</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="header-controls">
+      <div class="theme-switch" role="group" aria-label="Color theme">
+        <button type="button" class="theme-auto" data-theme-choice="system" aria-label="Use system theme" aria-pressed="false">Auto</button>
+        <button type="button" data-theme-choice="light" aria-label="Use light theme" aria-pressed="false"><span aria-hidden="true">☀</span></button>
+        <button type="button" data-theme-choice="dark" aria-label="Use dark theme" aria-pressed="false"><span aria-hidden="true">☾</span></button>
       </div>
+      <a class="header-link" href="https://github.com/Zaptrix" target="_blank" rel="noreferrer">
+        GitHub <span aria-hidden="true">↗</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span>Menu</span>
+        <i aria-hidden="true"></i>
+      </button>
     </div>
   </header>
 
-  <!-- Full-viewport 3D stage -->
-  <div id="stage"><canvas id="three-canvas"></canvas></div>
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="spectrum-orbit orbit-one" aria-hidden="true"></div>
+      <div class="spectrum-orbit orbit-two" aria-hidden="true"></div>
 
-  <section class="hero">
-    <div class="hero-inner container">
-      <div class="eyebrow">Entry-level Software Engineer • QA Engineer • AI tooling</div>
-      <h1 class="title">Reliable software. Testable systems. Clear documentation.</h1>
-      <p class="subtitle">
-        Entry-level Software Engineer / QA Engineer (B.S. Computer Science, 2023) focused on reliable, testable workflows and documented process improvements.
-        I evaluate local AI tooling and translate findings into repeatable setups, troubleshooting notes, and clear documentation.
-      </p>
-      <div class="cta">
-        <a class="btn primary" href="mailto:doncudd3@gmail.com">Email me</a>
-        <a class="btn" href="#projects">Projects</a>
-        <a class="btn" href="#experience">Experience</a>
-        <a class="btn" id="resume-btn" href="Resume_Cuddihee.pdf" download>Download Resume (PDF)</a>
+      <div class="hero-copy reveal">
+        <div class="hero-kicker">
+          <span class="status-dot" aria-hidden="true"></span>
+          Batavia, Illinois · Open to opportunities
+        </div>
+        <h1 id="hero-title">
+          Systems<br>
+          <span class="outline-text">with a</span><br>
+          pulse.
+        </h1>
+        <p class="hero-intro">
+          I build, connect, and troubleshoot digital systems—from web experiences and
+          software to agentic AI, remote support, and networks—with a designer’s eye for clarity.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-spectrum" href="#work"><span>Explore the work</span><b aria-hidden="true">↓</b></a>
+          <a class="text-link" href="Resume_Cuddihee.pdf" download>Download résumé <span aria-hidden="true">↘</span></a>
+        </div>
       </div>
-    </div>
-  </section>
 
-  <main id="content" class="container" tabindex="-1">
-    <section id="projects" aria-labelledby="projects-h">
-      <h2 id="projects-h">Selected Projects</h2>
-      <div class="grid">
-        <article class="card span-6">
-          <h3>OpenClaw AI Deployment (2025 – Present)</h3>
-          <p>Engineered and deployed a remote-accessible multi-agent AI ecosystem on WSL, utilizing Tailscale for secure remote access. Orchestrated specialized agents powered by the Gemini 3.1 Pro API to autonomously execute tasks like email routing, code generation, and IoT smart home device control.</p>
-          <p class="meta">WSL, Tailscale, Multi-Agent AI Ecosystem, Gemini API. <span aria-hidden>•</span> Optimized context structures via Markdown and JSON.</p>
-        </article>
-
-        <article class="card span-6">
-          <h3>Local LLM Hardware Optimization (2025)</h3>
-          <p>Architected local compute environments for Llama 3 models using Ollama, strictly bounded by edge-like hardware constraints (12GB VRAM / 64GB RAM). Evaluated model quantizations and managed context window limits to balance generation speed and stability.</p>
-          <p class="meta">Ollama, Llama 3, Quantization, Edge AI. <span aria-hidden>•</span> Hardware constraint optimization.</p>
-        </article>
-
-        <article class="card span-6">
-          <h3>Earth Driving Simulator (2025)</h3>
-          <p>Developed a global 3D driving simulator web application utilizing Vite, CesiumJS, and Google Maps Photorealistic 3D Tiles to enable unrestricted driving across mapped satellite photogrammetry terrain.</p>
-          <p class="meta">Vite, CesiumJS, 3D Tile Streaming. <span aria-hidden>•</span> Geometry loading optimization.</p>
-        </article>
-
-        <article class="card span-6">
-          <h3>AI-Assisted QA Automation (2025)</h3>
-          <p>Built test workflows and tracking systems for software reliability testing to identify recurring failure modes, state/logic bugs, and UI defects. Created repeatable manual pass/fail matrices and checklists for continuous integration checks.</p>
-          <p class="meta">QA Automation, Testing Workflows. <span aria-hidden>•</span> Failure-mode tracking.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="experience" aria-labelledby="exp-h">
-      <h2 id="exp-h">Experience</h2>
-
-      <article class="card">
-        <h3>Call Center Analyst — Agilant Solutions</h3>
-        <p class="meta">Lisle, IL • Feb 2024 – Dec 2025</p>
-        <ul class="list">
-          <li>Diagnosed complex enterprise software issues, producing reproducible root-cause documentation to accelerate engineering escalation and Tier 2/3 resolution.</li>
-          <li>Spearheaded automated alerting improvements, collaborating with partner teams to implement notifications that improved response times and SLA compliance.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h3>Help Desk Student Worker — College of DuPage</h3>
-        <p class="meta">Glen Ellyn, IL • Sep 2021 – Dec 2022</p>
-        <ul class="list">
-          <li>Resolved Level 1-3 technical tickets through structured triage, root-cause isolation, and hardware diagnostics across a massive campus network.</li>
-          <li>Onboarded and trained new technical hires on ticket workflow, enterprise escalation standards, and SLA-driven customer communication.</li>
-        </ul>
-      </article>
-    </section>
-
-    <section id="skills" aria-labelledby="skills-h">
-      <h2 id="skills-h">Skills</h2>
-      <div class="card">
-        <div class="skills" aria-label="Skills list">
-          <!-- Languages -->
-          <span class="chip">C/C++</span>
-          <span class="chip">Python</span>
-          <span class="chip">JavaScript</span>
-          <span class="chip">Java</span>
-          <span class="chip">SQL</span>
-          <span class="chip">Bash</span>
-          <span class="chip">PowerShell</span>
-
-          <!-- AI & Embedded -->
-          <span class="chip">llama.cpp</span>
-          <span class="chip">Model Quantization</span>
-          <span class="chip">VRAM Optimization</span>
-          <span class="chip">ComfyUI</span>
-          <span class="chip">Ollama</span>
-
-          <!-- Systems & Tools -->
-          <span class="chip">Linux (WSL)</span>
-          <span class="chip">Git</span>
-          <span class="chip">Wireshark</span>
-          <span class="chip">Nmap</span>
-          <span class="chip">Vite</span>
-          <span class="chip">Three.js</span>
-          <span class="chip">CesiumJS</span>
+      <div class="hero-visual reveal">
+        <div class="visual-index mono">FIG. 001 / OPERATING PROFILE</div>
+        <div class="hero-frame">
+          <div class="profile-glow" aria-hidden="true"></div>
+          <div class="operating-profile">
+            <div class="profile-header mono"><span>DON CUDDIHEE / PRACTICE</span><span>01—03</span></div>
+            <article class="profile-row">
+              <span class="profile-number mono">01 / BUILD</span>
+              <div><h3>Interfaces &amp; software</h3><p>Useful web experiences, applications, and automation.</p></div>
+            </article>
+            <article class="profile-row">
+              <span class="profile-number mono">02 / CONNECT</span>
+              <div><h3>Models, APIs &amp; devices</h3><p>AI workflows, networks, and local-to-remote systems.</p></div>
+            </article>
+            <article class="profile-row">
+              <span class="profile-number mono">03 / RESOLVE</span>
+              <div><h3>Technical failures</h3><p>Calm diagnosis, clear documentation, and reliable handoffs.</p></div>
+            </article>
+            <div class="profile-footer mono"><span>SOFTWARE</span><span>AI</span><span>SUPPORT</span><span>DESIGN</span></div>
+          </div>
+          <div class="chromatic-shift" aria-hidden="true"></div>
+        </div>
+        <div class="visual-caption">
+          <span>Software / systems / support</span>
+          <span>Theme-aware translucent study</span>
         </div>
       </div>
     </section>
 
-    <section id="education" aria-labelledby="edu-h">
-      <h2 id="edu-h">Education</h2>
-      <div class="card">
-        <strong>Bachelor of Science in Computer Science — Lewis University (2023)</strong>
-        <div class="meta">College of Aviation, Science and Technology • Cumulative GPA: 3.42/4.0</div>
-        <div class="meta">Relevant Coursework: Algorithms &amp; Data Structures, Operating Systems, Linear Algebra, Discrete Mathematics, Cybersecurity</div>
+    <section class="work section-shell" id="work" aria-labelledby="work-title">
+      <div class="section-heading reveal">
+        <p class="section-number mono">01 / SELECTED SYSTEMS</p>
+        <h2 id="work-title">Built for the point<br>where things connect.</h2>
+        <p>Software projects grounded in operational reality: secure boundaries, constrained hardware, useful interfaces, and failure modes that can actually be diagnosed.</p>
+      </div>
+
+      <div class="project-list">
+        <article class="project-card reveal">
+          <div class="project-index" aria-hidden="true"><span>01</span><i></i></div>
+          <div class="project-body">
+            <div class="project-meta mono"><span>01 / AGENTIC AI</span><span>2026—NOW</span></div>
+            <h3>Hybrid Agentic AI Workbench</h3>
+            <p>A hybrid local/cloud system with 13 isolated agents for development, email, image generation, research, monitoring, weather, career workflows, and home automation.</p>
+          </div>
+          <div class="project-details">
+            <p class="project-scope mono">ORCHESTRATION · LOCAL/CLOUD · OPERATIONS</p>
+            <ul class="tag-list" aria-label="Technologies">
+              <li>OpenClaw</li><li>Python</li><li>Gemini</li><li>Ollama</li><li>Tailscale</li>
+            </ul>
+            <p class="project-status"><span>Internal system</span> Architecture summary</p>
+          </div>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-index" aria-hidden="true"><span>02</span><i></i></div>
+          <div class="project-body">
+            <div class="project-meta mono"><span>02 / SYSTEMS BRIDGE</span><span>2026—NOW</span></div>
+            <h3>Windows / WSL Local AI Bridge</h3>
+            <p>An authenticated FastAPI bridge connecting remote agents to Windows-native local inference, image generation, file transfer, Telegram delivery, and live system metrics.</p>
+          </div>
+          <div class="project-details">
+            <p class="project-scope mono">WINDOWS HOST · WSL CLIENT · AUTH API</p>
+            <ul class="tag-list" aria-label="Technologies">
+              <li>FastAPI</li><li>ComfyUI</li><li>Ollama</li><li>REST</li>
+            </ul>
+            <p class="project-status"><span>Internal system</span> Sanitized overview</p>
+          </div>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-index" aria-hidden="true"><span>03</span><i></i></div>
+          <div class="project-body">
+            <div class="project-meta mono"><span>03 / AI + WEB</span><span>2023—2026</span></div>
+            <h3>Multi-Provider LLM Evaluator</h3>
+            <p>A browser-based workbench that streams concurrent model responses, anonymizes them, and produces orchestrator-weighted scorecards across cloud and local providers.</p>
+          </div>
+          <div class="project-details">
+            <p class="project-scope mono">PARALLEL RESPONSES · BLIND REVIEW · SYNTHESIS</p>
+            <ul class="tag-list" aria-label="Technologies">
+              <li>JavaScript</li><li>Python</li><li>SSE</li><li>Multi-provider</li>
+            </ul>
+            <a class="project-link" href="https://github.com/Zaptrix/llm-ensemble" target="_blank" rel="noreferrer">View the original public snapshot <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-index" aria-hidden="true"><span>04</span><i></i></div>
+          <div class="project-body">
+            <div class="project-meta mono"><span>04 / REAL-TIME WEB</span><span>2025</span></div>
+            <h3>Earth Driving Simulator</h3>
+            <p>A global 3D driving experience built on photorealistic terrain, with work focused on tile streaming, geometry loading, camera behavior, and browser GPU constraints.</p>
+          </div>
+          <div class="project-details">
+            <p class="project-scope mono">3D TILES · CAMERA SYSTEMS · GPU CONSTRAINTS</p>
+            <ul class="tag-list" aria-label="Technologies">
+              <li>Vite</li><li>CesiumJS</li><li>3D Tiles</li><li>JavaScript</li>
+            </ul>
+            <p class="project-status"><span>Prototype</span> Case study</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="capabilities" id="capabilities" aria-labelledby="capabilities-title">
+      <div class="capability-spectrum" aria-hidden="true"></div>
+      <div class="section-shell">
+        <div class="section-heading section-heading-dark reveal">
+          <p class="section-number mono">02 / CAPABILITIES</p>
+          <h2 id="capabilities-title">One operator.<br>A full stack of problems.</h2>
+          <p>I move between implementation, diagnosis, infrastructure, support, and presentation—because the edges between them are usually where the real problem lives.</p>
+        </div>
+
+        <div class="capability-grid">
+          <article class="capability-card reveal"><span class="cap-index mono">01</span><h3>Web<br>Development</h3><p>Responsive interfaces, real-time browser experiences, REST integrations, performance-aware interaction, and accessible design systems.</p><div class="cap-tags mono">JAVASCRIPT · VITE · THREE.JS · CESIUMJS</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">02</span><h3>Software &amp;<br>Automation</h3><p>Practical tools and services that connect APIs, files, data, devices, and repeatable workflows across Windows and Linux.</p><div class="cap-tags mono">PYTHON · FASTAPI · POWERSHELL · SQL · GIT</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">03</span><h3>AI Systems<br>&amp; Agents</h3><p>Local inference, multi-agent architecture, provider integrations, prompt systems, image pipelines, and hardware-conscious deployment.</p><div class="cap-tags mono">OLLAMA · LLAMA.CPP · COMFYUI · GEMINI</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">04</span><h3>Technical<br>Troubleshooting</h3><p>Root-cause isolation, reproducible notes, remote support, escalation handoffs, regression testing, and calm user communication.</p><div class="cap-tags mono">WINDOWS · MACOS · QA · DOCUMENTATION</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">05</span><h3>Networking<br>&amp; Remote</h3><p>Secure remote access, service monitoring, TCP/IP diagnosis, allowlisted interfaces, and support for connected devices.</p><div class="cap-tags mono">TAILSCALE · WIRESHARK · NMAP · WSL</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">06</span><h3>Visual<br>Design</h3><p>High-contrast digital artwork, graphic systems, visual storytelling, and interfaces where the technical and expressive reinforce each other.</p><div class="cap-tags mono">COMPOSITION · COLOR · UI · IMAGE SYSTEMS</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="experience section-shell" id="experience" aria-labelledby="experience-title">
+      <div class="section-heading reveal">
+        <p class="section-number mono">03 / FIELD EXPERIENCE</p>
+        <h2 id="experience-title">Support is systems<br>thinking in real time.</h2>
+        <p>My development work is informed by years spent at the sharp end of technology: finding the fault, earning trust, documenting the path, and keeping the handoff useful.</p>
+      </div>
+
+      <div class="timeline">
+        <article class="timeline-item reveal">
+          <div class="timeline-date mono">2024—2025</div>
+          <div class="timeline-role"><span>Agilant Solutions / Lisle, IL</span><h3>Call Center Analyst</h3></div>
+          <div class="timeline-copy"><p>Managed roughly 15–20 tickets from about 30 calls per day across Windows, macOS, software, networking, and connected devices. Remotely guided field technicians through cameras, smart locks, thermostats, televisions, and residential network services.</p><p>Created reproducible Tier 2/3 handoffs and proposed queue, alerting, and AI-searchable knowledge-base improvements.</p></div>
+        </article>
+        <article class="timeline-item reveal">
+          <div class="timeline-date mono">2021—2022</div>
+          <div class="timeline-role"><span>College of DuPage / Glen Ellyn, IL</span><h3>Help Desk Student Worker</h3></div>
+          <div class="timeline-copy"><p>Supported students, faculty, and staff through account recovery, hardware diagnostics, structured triage, documentation, and escalation in a large campus environment.</p><p>Helped restore access during a high-volume password incident and trained peers on ticket workflow and user communication.</p></div>
+        </article>
+        <article class="timeline-item reveal">
+          <div class="timeline-date mono">2020—2021</div>
+          <div class="timeline-role"><span>TCC Wireless / Lisle, IL</span><h3>Mobile Device Support</h3></div>
+          <div class="timeline-copy"><p>Troubleshot phones, tablets, connectivity, service, account access, and device setup while translating technical problems into clear explanations for non-technical customers.</p></div>
+        </article>
+      </div>
+
+      <div class="education-card reveal">
+        <div><span class="mono">EDUCATION / 2023</span><h3>B.S. Computer Science</h3><p>Lewis University · College of Aviation, Science and Technology · 3.42 GPA</p></div>
+        <div class="education-detail mono">OPERATING SYSTEMS · CYBERSECURITY<br>ALGORITHMS · DATABASES · LINEAR ALGEBRA</div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <div class="contact-noise" aria-hidden="true"></div>
+      <div class="contact-copy reveal">
+        <p class="section-number mono">04 / MAKE CONTACT</p>
+        <h2 id="contact-title">Have a stubborn<br>problem?</h2>
+        <p>Let’s turn it into a system that makes sense.</p>
+        <a class="contact-email" href="mailto:doncudd3@gmail.com">doncudd3@gmail.com <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="contact-links reveal">
+        <a href="https://github.com/Zaptrix" target="_blank" rel="noreferrer"><span>Code</span><b>GitHub ↗</b></a>
+        <a href="Resume_Cuddihee.pdf" download><span>Background</span><b>Résumé ↘</b></a>
+        <a href="mailto:doncudd3@gmail.com"><span>New project</span><b>Start a conversation ↗</b></a>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <div><strong>Don Cuddihee</strong> • <a href="mailto:doncudd3@gmail.com">doncudd3@gmail.com</a></div>
-    </div>
+  <footer class="site-footer">
+    <div class="footer-brand">DON<br>CUDDIHEE</div>
+    <p>Software · Systems · Support · Design</p>
+    <p>© <span data-year>2026</span> / Built from scratch</p>
+    <a href="#top">Back to top ↑</a>
   </footer>
 
-  <!-- Three.js from CDN (no inline JS inside src-tag) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script>
-    // ---------------------
-    // Globals & utilities
-    // ---------------------
-    let renderer = null;
-    let scene, camera;
-    const stage = document.getElementById('stage');
-    const canvas = document.getElementById('three-canvas');
-
-    // Parallax tuning (vertical motion more dramatic; horizontal unchanged)
-    // Parallax tuning: move with the text but slower, to feel background
-    const VERTICAL_SCALE = 1.2;  // increase vertical spacing between objects
-    const PARALLAX_AMP = 0.55;   // <1 => slower than text
-    const CURVE_EXPONENT = 1;    // linear mapping for predictable motion
-    const VIS_MARGIN = 0.4;   // 40% viewport height pre/post margin for visibility window (base)
-
-    // Lights declared up-front to avoid TDZ when theme applies
-    let lights = null;
-    function updateLightColors(dark){
-      if (!lights || !lights.hemi) return;
-      lights.hemi.color.setHex(dark ? 0xbfd8ff : 0xffffff);
-      lights.hemi.groundColor.setHex(dark ? 0x20242a : 0x222222);
-      lights.key.intensity = dark ? 0.8 : 0.7;
-      lights.p1.intensity = dark ? 55 : 45;
-      lights.p2.intensity = dark ? 55 : 45;
-    }
-
-    function setThreeBg(dark){
-      if (renderer) {
-        const hex = dark ? 0x0b0f14 : 0xf7f7f8;
-        renderer.setClearColor(hex, 0); // transparent so page bg shows
-      }
-      updateLightColors(dark); // safe no-op until lights are built
-    }
-
-    // Theme handling
-    const themeBtns = Array.from(document.querySelectorAll('.toggle-btn'));
-    function systemDark(){ return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
-    function applyTheme(mode){
-      localStorage.setItem('theme', mode);
-      const dark = mode === 'dark' || (mode === 'system' && systemDark());
-      document.body.classList.toggle('dark', dark);
-      themeBtns.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.theme === mode)));
-      setThreeBg(dark);
-    }
-    themeBtns.forEach(btn => btn.addEventListener('click', () => applyTheme(btn.dataset.theme)));
-    window.matchMedia('(prefers-color-scheme: dark)')?.addEventListener('change', () => { if (localStorage.getItem('theme') === 'system') applyTheme('system'); });
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light' || savedTheme === 'dark' || savedTheme === 'system') {
-      applyTheme(savedTheme);
-    } else {
-      // First visit: defer one frame so UI paints before toggling, then apply 'system'
-      requestAnimationFrame(() => applyTheme('system'));
-    }
-
-    // ---------------------
-    // Three.js scene setup
-    // ---------------------
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
-    camera.position.set(0, 0, 6);
-
-    try {
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      if (renderer.outputEncoding !== undefined) renderer.outputEncoding = THREE.sRGBEncoding;
-      renderer.physicallyCorrectLights = true;
-      setThreeBg(document.body.classList.contains('dark'));
-    } catch(e){
-      console.error('WebGL init failed:', e); stage.style.display = 'none';
-    }
-
-    // Dynamic lighting
-    function buildLights(){
-      lights = { hemi:null, key:null, p1:null, p2:null };
-      lights.hemi = new THREE.HemisphereLight(0xffffff, 0x101010, 0.5);
-      lights.key = new THREE.DirectionalLight(0xffffff, 0.7);
-      lights.key.position.set(5, 8, 6);
-      lights.p1 = new THREE.PointLight(0xff66cc, 40, 20); // hot pink
-      lights.p2 = new THREE.PointLight(0x66ccff, 40, 20); // cyan
-      scene.add(lights.hemi, lights.key, lights.p1, lights.p2);
-      updateLightColors(document.body.classList.contains('dark'));
-    }
-    buildLights();
-
-    // ---------- Objects that follow sections (unique polygonal shapes) ----------
-    const anchors = [
-      { id: 'projects',   side: +1, kind: 'dode',   color: 0x7c4dff }, // violet dodecahedron (right)
-      { id: 'experience', side: -1, kind: 'icosa',  color: 0x00e5ff }, // cyan icosahedron (left)
-      { id: 'skills',     side: +1, kind: 'octa',   color: 0xff2d55 }, // magenta octahedron (right)
-      { id: 'education',  side: -1, kind: 'tetra',  color: 0xffb000 }  // amber tetrahedron (left)
-    ];
-    const groups = [];
-
-    function polyMaterial(hex){
-      return new THREE.MeshStandardMaterial({ color: hex, metalness: 0.25, roughness: 0.55, flatShading: true });
-    }
-
-    function buildFor(anchor){
-      const g = new THREE.Group();
-      let geom;
-      switch(anchor.kind){
-        case 'dode':  geom = new THREE.DodecahedronGeometry(0.95, 0); break;
-        case 'icosa': geom = new THREE.IcosahedronGeometry(0.95, 0);  break;
-        case 'octa':  geom = new THREE.OctahedronGeometry(0.95, 0);   break;
-        case 'tetra': geom = new THREE.TetrahedronGeometry(0.95, 0);  break;
-        default:      geom = new THREE.BoxGeometry(1.1, 1.1, 1.1);    break;
-      }
-      const mesh = new THREE.Mesh(geom, polyMaterial(anchor.color));
-      g.add(mesh);
-      scene.add(g);
-      g.userData = { el: document.getElementById(anchor.id), id: anchor.id, side: anchor.side, rot: (Math.random()*0.003 + 0.001) * (Math.random()<0.5?-1:1), kind: anchor.kind };
-      groups.push(g);
-    }
-    anchors.forEach(buildFor);
-
-    // Map DOM Y to world Y
-    function frustum(){
-      const size = renderer.getSize(new THREE.Vector2());
-      const aspect = size.x / Math.max(1,size.y);
-      const vFOV = (THREE.MathUtils? THREE.MathUtils.degToRad(camera.fov) : (Math.PI/180)*camera.fov);
-      const height = 2 * Math.tan(vFOV/2) * camera.position.z;
-      const width = height * aspect;
-      return { width, height };
-    }
-
-    function updateGroupPositions(){
-      const { width, height } = frustum();
-      const container = document.querySelector('.container');
-      const contPx = container ? container.getBoundingClientRect().width : Math.min(1100, window.innerWidth*0.92);
-      const contWorld = width * (contPx / Math.max(1, window.innerWidth));
-      const sideBand = (width - contWorld) / 2; // world width available outside container on each side
-      const targetFromCenter = contWorld/2 + sideBand*0.6; // place 60% into side band
-      const sideX = (s)=> s * targetFromCenter;
-
-      for (const g of groups){
-        const el = g.userData.el; if (!el) continue;
-        const r = el.getBoundingClientRect();
-        const centerY = r.top + r.height*0.3; // a bit above center
-        const norm = (centerY / window.innerHeight) * 2 - 1; // -1 top, +1 bottom
-        // Non-linear curve amplifies motion; amp increases travel distance
-        const curved = Math.sign(norm) * Math.pow(Math.abs(norm), CURVE_EXPONENT);
-        g.position.y = (-curved * (height/2)) * VERTICAL_SCALE * PARALLAX_AMP;
-        // Maintain spacing adjustments
-        const nudge = height * 0.05; // ~5% of view height
-        if (g.userData.id === 'experience') g.position.y -= nudge; // pull down near top
-        if (g.userData.id === 'skills')     g.position.y += nudge; // push up near bottom
-        g.position.x = sideX(g.userData.side);
-        const vh = Math.max(1, window.innerHeight);
-        // Give the bottom sections (skills, education) extra *bottom* margin so they pop in earlier
-        const base = vh * VIS_MARGIN;
-        const extraBottom = (g.userData.id === 'skills') ? vh * 0.7 : (g.userData.id === 'education') ? vh * 0.3 : 0; // skills gets larger extra bottom margin to pop in earlier
-        const topMargin = base;
-        const bottomMargin = base + extraBottom;
-        g.visible = r.bottom > -topMargin && r.top < (vh + bottomMargin); // show near viewport
-      }
-    }
-
-    function resize(){
-      const rect = stage.getBoundingClientRect();
-      renderer.setSize(rect.width, rect.height, false);
-      camera.aspect = rect.width / Math.max(1, rect.height);
-      camera.updateProjectionMatrix();
-      updateGroupPositions();
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    function onScroll(){ updateGroupPositions(); }
-    window.addEventListener('scroll', onScroll, { passive:true });
-    onScroll();
-
-    // Animation loop (lights move dynamically)
-    function tick(){
-      const t = performance.now() * 0.001;
-      if (lights && lights.p1) lights.p1.position.set(Math.sin(t)*4.2, Math.cos(t*0.6)*2.2, 2.8);
-      if (lights && lights.p2) lights.p2.position.set(Math.cos(t*0.8)*-3.6, Math.sin(t*1.1)*3.0, 1.8);
-      for (const g of groups){ g.rotation.y += g.userData.rot; g.rotation.x += g.userData.rot*0.4; }
-      renderer.render(scene, camera);
-      requestAnimationFrame(tick);
-    }
-    tick();
-
-    // ---------------------
-    // Self-tests (dev only)
-    (function selfTests(){
-      try {
-        console.assert(!!document.querySelector('#three-canvas'), 'Canvas exists');
-        console.assert(renderer instanceof THREE.WebGLRenderer, 'Renderer initialized');
-        console.assert(groups.length === 4, 'Four anchor groups created');
-        console.assert(lights && lights.hemi && lights.key, 'Lights initialized');
-        updateGroupPositions();
-        console.assert(groups.every(g => Number.isFinite(g.position.y)), 'World Y is finite');
-        // Alternating sides: x * side should be > 0 (correct side)
-        console.assert(groups.every(g => (g.position.x * g.userData.side) > 0), 'Objects alternate left/right correctly');
-        // Unique geometry types
-        const types = groups.map(g => g.children[0].geometry.type);
-        console.assert(new Set(types).size === types.length, 'All shapes are unique');
-        // Flat shading applied
-        console.assert(groups.every(g => g.children[0].material.flatShading === true), 'Flat-shaded polygonal materials');
-        // Colors distinct
-        const colors = groups.map(g => g.children[0].material.color.getHex());
-        console.assert(new Set(colors).size === colors.length, 'Each shape has a unique color');
-        // Theme toggle reflects active mode (after first paint or stored mode)
-        const expected = localStorage.getItem('theme') || 'system';
-        const selected = (Array.from(document.querySelectorAll('.toggle-btn')).find(b => b.getAttribute('aria-pressed') === 'true')||{}).dataset?.theme;
-        console.assert(selected === expected || (expected === 'system' && selected === 'system'), 'Theme toggle reflects active mode');
-        // Resume link exists and points to PDF
-        const resume = document.getElementById('resume-btn');
-        console.assert(resume && /\.pdf(\?|$)/i.test(resume.getAttribute('href')), 'Resume download button points to a PDF');
-        // Email links updated
-        const mailtoOk = Array.from(document.querySelectorAll('a[href^="mailto:"]')).every(a => a.getAttribute('href').includes('doncudd3@gmail.com'));
-        console.assert(mailtoOk, 'Email links updated to donccudd3@gmail.com');
-        // Parallax: slower-than-text and same direction as text (opposite user scroll)
-        console.assert(PARALLAX_AMP > 0 && PARALLAX_AMP < 1, 'Parallax amp < 1 for slower-than-text');
-        const h=100;
-        const mapNormToY = (norm)=>{ const curved = Math.sign(norm)*Math.pow(Math.abs(norm), CURVE_EXPONENT); return (-curved * (h/2)) * VERTICAL_SCALE * PARALLAX_AMP; };
-        console.assert(mapNormToY(-0.6) > mapNormToY(-0.3), 'As section moves up (norm ↓), object Y increases (moves up)');
-        console.assert(mapNormToY(0.6) < mapNormToY(0.3), 'As section moves down (norm ↑), object Y decreases (moves down)');
-        // Amplitude check: object travel < text travel
-        const objSpan = Math.abs(mapNormToY(1) - mapNormToY(0));
-        const textSpan = (h/2) * VERTICAL_SCALE; // baseline if amp were 1
-        console.assert(objSpan < textSpan, 'Object moves slower than text');
-        // Visibility window tests — earlier render, later derender via VIS_MARGIN
-        (function visTests(){
-          const vh = 1000; const base = vh * VIS_MARGIN; const extra = vh * 0.3;
-          const computeGeneric = (top, bottom)=> (bottom > -base && top < (vh + base));
-          const computeBottomEdu  = (top, bottom)=> (bottom > -base && top < (vh + base + extra));
-          const computeBottomSkills = (top, bottom)=> (bottom > -base && top < (vh + base + vh*0.7));
-          // Generic sections
-          console.assert(computeGeneric(-350, -50) === true,  'Generic: above viewport but within margin → visible');
-          console.assert(computeGeneric(-1100, -900) === false,'Generic: far above beyond margin → not visible');
-          console.assert(computeGeneric(950, 1200) === true,   'Generic: below viewport but within base margin → visible');
-          console.assert(computeGeneric(1500, 1700) === false, 'Generic: far below beyond base margin → not visible');
-          // Bottom sections get earlier pop-in (education + skills have larger bottom margins)
-          console.assert(computeBottomEdu(1200, 1450) === true,   'Education: earlier pop-in below viewport with extra margin');
-          console.assert(computeBottomSkills(1350, 1600) === true, 'Skills: even earlier pop-in with larger extra bottom margin');
-          console.assert(computeBottomSkills(2200, 2400) === false,'Skills: still not visible when far below even with extra');
-        })();
-        setThreeBg(document.body.classList.contains('dark'));
-      } catch(e){ console.warn('Self-tests failed:', e); }
-    })();
-  </script>
 </body>
 </html>

@@ -1,0 +1,11 @@
+{
+  "name": "don-cuddihee-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Portfolio for software, AI systems, technical support, networking, and visual design.",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "dev": "python -m http.server 8080",
+    "check": "node --check src/js/app.js"
+  }
+}
