@@ -90,7 +90,7 @@ import {
     roughness: 0.2,
     clearcoat: 0.9
   });
-  const outer = new Mesh(new IcosahedronGeometry(1.34, 2), glass);
+  const outer = new Mesh(new IcosahedronGeometry(1.34, 4), glass);
   const inner = new Mesh(new OctahedronGeometry(0.67, 1), innerMaterial);
   core.add(outer, inner);
 
@@ -110,7 +110,7 @@ import {
       transmission: 0.35,
       clearcoat: 1
     });
-    const satellite = new Mesh(new SphereGeometry(radius, 20, 20), material);
+    const satellite = new Mesh(new SphereGeometry(radius, 48, 32), material);
     satellite.position.set(x, y, z);
     system.add(satellite);
     return satellite;
@@ -147,12 +147,12 @@ import {
 
     const shape = projectCanvas.dataset.shape;
     const geometry = shape === "torus"
-      ? new TorusGeometry(0.72, 0.2, 16, 64)
+      ? new TorusGeometry(0.72, 0.2, 32, 96)
       : shape === "icosahedron"
-        ? new IcosahedronGeometry(0.86, 1)
+        ? new IcosahedronGeometry(0.86, 3)
         : shape === "cube"
           ? new BoxGeometry(1.28, 1.28, 1.28, 2, 2, 2)
-          : new OctahedronGeometry(0.92, 1);
+          : new OctahedronGeometry(0.92, 4);
     const projectMaterial = new MeshPhysicalMaterial({
       color: new Color("#00e7ff"),
       emissive: new Color("#00e7ff"),
