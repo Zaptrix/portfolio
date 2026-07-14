@@ -7,7 +7,6 @@ import {
   Group,
   Mesh,
   MeshPhysicalMaterial,
-  OctahedronGeometry,
   PerspectiveCamera,
   PointLight,
   Scene,
@@ -90,7 +89,7 @@ import {
     clearcoat: 0.9
   });
   const outer = new Mesh(new SphereGeometry(1.34, 64, 48), glass);
-  const inner = new Mesh(new OctahedronGeometry(0.67, 1), innerMaterial);
+  const inner = new Mesh(new SphereGeometry(0.67, 48, 32), innerMaterial);
   core.add(outer, inner);
 
   const ringA = new Mesh(new TorusGeometry(1.8, 0.045, 12, 128), ringGlass);
