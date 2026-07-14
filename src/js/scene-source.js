@@ -5,7 +5,6 @@ import {
   Color,
   DirectionalLight,
   Group,
-  IcosahedronGeometry,
   Mesh,
   MeshPhysicalMaterial,
   OctahedronGeometry,
@@ -90,7 +89,7 @@ import {
     roughness: 0.2,
     clearcoat: 0.9
   });
-  const outer = new Mesh(new IcosahedronGeometry(1.34, 4), glass);
+  const outer = new Mesh(new SphereGeometry(1.34, 64, 48), glass);
   const inner = new Mesh(new OctahedronGeometry(0.67, 1), innerMaterial);
   core.add(outer, inner);
 
@@ -149,10 +148,10 @@ import {
     const geometry = shape === "torus"
       ? new TorusGeometry(0.72, 0.2, 32, 96)
       : shape === "icosahedron"
-        ? new IcosahedronGeometry(0.86, 3)
+        ? new SphereGeometry(0.86, 48, 32)
         : shape === "cube"
           ? new BoxGeometry(1.28, 1.28, 1.28, 2, 2, 2)
-          : new OctahedronGeometry(0.92, 4);
+          : new SphereGeometry(0.92, 48, 32);
     const projectMaterial = new MeshPhysicalMaterial({
       color: new Color("#00e7ff"),
       emissive: new Color("#00e7ff"),
