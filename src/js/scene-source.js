@@ -49,8 +49,8 @@ import {
   renderer.toneMappingExposure = 1.15;
 
   const scene = new Scene();
-  const camera = new PerspectiveCamera(35, 1, 0.1, 100);
-  camera.position.set(0, 0, 7.4);
+  const camera = new PerspectiveCamera(40, 1, 0.1, 100);
+  camera.position.set(0, 0, 8);
 
   const system = new Group();
   const core = new Group();
@@ -217,11 +217,14 @@ import {
 
   const setLayout = () => {
     const { width, height } = viewport.getBoundingClientRect();
-    const scale = Math.min(0.9, Math.max(0.58, Math.min(width, height) / 520));
-    system.position.set(0, 0, 0);
-    system.scale.setScalar(scale);
     camera.aspect = Math.max(0.1, width / Math.max(1, height));
     camera.updateProjectionMatrix();
+    const verticalHalfView = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
+    const horizontalHalfView = verticalHalfView * camera.aspect;
+    const systemRadius = 2.2;
+    const scale = Math.max(0.28, Math.min(0.88, (Math.min(verticalHalfView, horizontalHalfView) / systemRadius) * 0.86));
+    system.position.set(0, 0, 0);
+    system.scale.setScalar(scale);
     renderer.setSize(width, height, false);
   };
 
