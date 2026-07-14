@@ -32,6 +32,7 @@
   </script>
   <link rel="stylesheet" href="src/css/style.css">
   <script src="src/js/app.js" defer></script>
+  <script src="src/js/scene.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -96,6 +97,8 @@
         <div class="visual-index mono">FIG. 001 / OPERATING PROFILE</div>
         <div class="hero-frame">
           <div class="profile-glow" aria-hidden="true"></div>
+          <canvas id="hero-canvas" data-system-scene aria-hidden="true"></canvas>
+          <div class="hero-core-fallback" aria-hidden="true"><i></i><i></i><i></i></div>
           <div class="operating-profile">
             <div class="profile-header mono"><span>DON CUDDIHEE / PRACTICE</span><span>01—03</span></div>
             <article class="profile-row">
@@ -115,81 +118,81 @@
           <div class="chromatic-shift" aria-hidden="true"></div>
         </div>
         <div class="visual-caption">
-          <span>Software / systems / support</span>
-          <span>Theme-aware translucent study</span>
+          <span>Live glass system core / WebGL</span>
+          <span>Theme-reactive / reduced-motion aware</span>
         </div>
       </div>
     </section>
 
     <section class="work section-shell" id="work" aria-labelledby="work-title">
       <div class="section-heading reveal">
-        <p class="section-number mono">01 / SELECTED SYSTEMS</p>
+        <p class="section-number mono">01 / CURRENT SYSTEMS</p>
         <h2 id="work-title">Built for the point<br>where things connect.</h2>
-        <p>Software projects grounded in operational reality: secure boundaries, constrained hardware, useful interfaces, and failure modes that can actually be diagnosed.</p>
+        <p>Current work across AI-assisted engineering, secure local tooling, real-time 3D systems, and private data products—built from working source, not résumé shorthand.</p>
       </div>
 
       <div class="project-list">
         <article class="project-card reveal">
           <div class="project-index" aria-hidden="true"><span>01</span><i></i></div>
           <div class="project-body">
-            <div class="project-meta mono"><span>01 / AGENTIC AI</span><span>2026—NOW</span></div>
-            <h3>Hybrid Agentic AI Workbench</h3>
-            <p>A hybrid local/cloud system with 13 isolated agents for development, email, image generation, research, monitoring, weather, career workflows, and home automation.</p>
+            <div class="project-meta mono"><span>01 / AI ENGINEERING</span><span>2026—NOW</span></div>
+            <h3>Codex Engineering Environment</h3>
+            <p>A configured local Codex environment that acts as an engineering control plane across Windows, WSL, Git, browser workflows, project tools, and structured task archives.</p>
           </div>
           <div class="project-details">
-            <p class="project-scope mono">ORCHESTRATION · LOCAL/CLOUD · OPERATIONS</p>
+            <p class="project-scope mono">AGENTIC DEVELOPMENT · MULTI-TOOL WORKFLOWS · VERIFICATION</p>
             <ul class="tag-list" aria-label="Technologies">
-              <li>OpenClaw</li><li>Python</li><li>Gemini</li><li>Ollama</li><li>Tailscale</li>
+              <li>Codex</li><li>Windows / WSL</li><li>Git</li><li>MCP</li><li>Automation</li>
             </ul>
-            <p class="project-status"><span>Internal system</span> Architecture summary</p>
+            <p class="project-status"><span>Active system</span> Local engineering workspace</p>
           </div>
         </article>
 
         <article class="project-card reveal">
           <div class="project-index" aria-hidden="true"><span>02</span><i></i></div>
           <div class="project-body">
-            <div class="project-meta mono"><span>02 / SYSTEMS BRIDGE</span><span>2026—NOW</span></div>
-            <h3>Windows / WSL Local AI Bridge</h3>
-            <p>An authenticated FastAPI bridge connecting remote agents to Windows-native local inference, image generation, file transfer, Telegram delivery, and live system metrics.</p>
+            <div class="project-meta mono"><span>02 / MCP + SYSTEMS</span><span>2026—NOW</span></div>
+            <h3>Personal Ops MCP Server</h3>
+            <p>A security-first FastAPI and Streamable HTTP MCP service that gives Codex and OpenClaw one read-only contract for ActivityWatch summaries, ComfyUI, and local LLM health across Windows and WSL.</p>
           </div>
           <div class="project-details">
-            <p class="project-scope mono">WINDOWS HOST · WSL CLIENT · AUTH API</p>
+            <p class="project-scope mono">TOKEN AUTH · READ-ONLY TOOLS · WINDOWS/WSL BRIDGE</p>
             <ul class="tag-list" aria-label="Technologies">
-              <li>FastAPI</li><li>ComfyUI</li><li>Ollama</li><li>REST</li>
+              <li>Python</li><li>FastAPI</li><li>FastMCP</li><li>ASGI</li><li>WSL</li>
             </ul>
-            <p class="project-status"><span>Internal system</span> Sanitized overview</p>
+            <p class="project-status"><span>Deployed locally</span> Shared tool contract</p>
           </div>
         </article>
 
         <article class="project-card reveal">
           <div class="project-index" aria-hidden="true"><span>03</span><i></i></div>
           <div class="project-body">
-            <div class="project-meta mono"><span>03 / AI + WEB</span><span>2023—2026</span></div>
-            <h3>Multi-Provider LLM Evaluator</h3>
-            <p>A browser-based workbench that streams concurrent model responses, anonymizes them, and produces orchestrator-weighted scorecards across cloud and local providers.</p>
+            <div class="project-meta mono"><span>03 / UNREAL + C++</span><span>2026—NOW</span></div>
+            <h3>Planet Hot Wheels Redux</h3>
+            <p>A playable Unreal Engine 5.8 arcade-combat racing vertical slice with custom rigid-body handling, two procedural circuits, six energy powers, four-player local split-screen, and eight-player LAN sessions.</p>
           </div>
           <div class="project-details">
-            <p class="project-scope mono">PARALLEL RESPONSES · BLIND REVIEW · SYNTHESIS</p>
+            <p class="project-scope mono">ARCADE PHYSICS · LOCAL/LAN MULTIPLAYER · HARDWARE RT</p>
             <ul class="tag-list" aria-label="Technologies">
-              <li>JavaScript</li><li>Python</li><li>SSE</li><li>Multi-provider</li>
+              <li>Unreal 5.8</li><li>C++</li><li>Split-screen</li><li>LAN</li><li>Ray tracing</li>
             </ul>
-            <a class="project-link" href="https://github.com/Zaptrix/llm-ensemble" target="_blank" rel="noreferrer">View the original public snapshot <span aria-hidden="true">↗</span></a>
+            <p class="project-status"><span>Private prototype</span> Non-commercial preservation build</p>
           </div>
         </article>
 
         <article class="project-card reveal">
           <div class="project-index" aria-hidden="true"><span>04</span><i></i></div>
           <div class="project-body">
-            <div class="project-meta mono"><span>04 / REAL-TIME WEB</span><span>2025</span></div>
-            <h3>Earth Driving Simulator</h3>
-            <p>A global 3D driving experience built on photorealistic terrain, with work focused on tile streaming, geometry loading, camera behavior, and browser GPU constraints.</p>
+            <div class="project-meta mono"><span>04 / LOCAL DATA PRODUCT</span><span>2026—NOW</span></div>
+            <h3>PoGo Vault</h3>
+            <p>A local-first Pokémon GO collection manager that turns PokéGenie exports into searchable collections, PvP-ranked action queues, duplicate comparisons, protected recommendations, backups, and on-demand 3D detail views.</p>
           </div>
           <div class="project-details">
-            <p class="project-scope mono">3D TILES · CAMERA SYSTEMS · GPU CONSTRAINTS</p>
+            <p class="project-scope mono">PRIVATE-BY-DESIGN · PVP ANALYSIS · LAZY 3D ASSETS</p>
             <ul class="tag-list" aria-label="Technologies">
-              <li>Vite</li><li>CesiumJS</li><li>3D Tiles</li><li>JavaScript</li>
+              <li>React</li><li>TypeScript</li><li>IndexedDB</li><li>Three.js</li><li>Vite</li>
             </ul>
-            <p class="project-status"><span>Prototype</span> Case study</p>
+            <p class="project-status"><span>Local-first prototype</span> Collection data stays on-device</p>
           </div>
         </article>
       </div>
@@ -205,12 +208,12 @@
         </div>
 
         <div class="capability-grid">
-          <article class="capability-card reveal"><span class="cap-index mono">01</span><h3>Web<br>Development</h3><p>Responsive interfaces, real-time browser experiences, REST integrations, performance-aware interaction, and accessible design systems.</p><div class="cap-tags mono">JAVASCRIPT · VITE · THREE.JS · CESIUMJS</div></article>
-          <article class="capability-card reveal"><span class="cap-index mono">02</span><h3>Software &amp;<br>Automation</h3><p>Practical tools and services that connect APIs, files, data, devices, and repeatable workflows across Windows and Linux.</p><div class="cap-tags mono">PYTHON · FASTAPI · POWERSHELL · SQL · GIT</div></article>
-          <article class="capability-card reveal"><span class="cap-index mono">03</span><h3>AI Systems<br>&amp; Agents</h3><p>Local inference, multi-agent architecture, provider integrations, prompt systems, image pipelines, and hardware-conscious deployment.</p><div class="cap-tags mono">OLLAMA · LLAMA.CPP · COMFYUI · GEMINI</div></article>
-          <article class="capability-card reveal"><span class="cap-index mono">04</span><h3>Technical<br>Troubleshooting</h3><p>Root-cause isolation, reproducible notes, remote support, escalation handoffs, regression testing, and calm user communication.</p><div class="cap-tags mono">WINDOWS · MACOS · QA · DOCUMENTATION</div></article>
-          <article class="capability-card reveal"><span class="cap-index mono">05</span><h3>Networking<br>&amp; Remote</h3><p>Secure remote access, service monitoring, TCP/IP diagnosis, allowlisted interfaces, and support for connected devices.</p><div class="cap-tags mono">TAILSCALE · WIRESHARK · NMAP · WSL</div></article>
-          <article class="capability-card reveal"><span class="cap-index mono">06</span><h3>Visual<br>Design</h3><p>High-contrast digital artwork, graphic systems, visual storytelling, and interfaces where the technical and expressive reinforce each other.</p><div class="cap-tags mono">COMPOSITION · COLOR · UI · IMAGE SYSTEMS</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">01</span><h3>Web<br>Development</h3><p>Responsive interfaces, real-time browser experiences, local-first data products, performance-aware interaction, and accessible design systems.</p><div class="cap-tags mono">REACT · TYPESCRIPT · VITE · THREE.JS</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">02</span><h3>Software &amp;<br>Automation</h3><p>Practical tools and services that connect APIs, files, data, devices, and repeatable workflows across Windows, Linux, Android, and Unreal.</p><div class="cap-tags mono">PYTHON · C++ · KOTLIN · FASTAPI · POWERSHELL</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">03</span><h3>AI Systems<br>&amp; Agents</h3><p>Agentic development, MCP tool contracts, local inference, provider integrations, image pipelines, and hardware-conscious deployment.</p><div class="cap-tags mono">CODEX · FASTMCP · OLLAMA · COMFYUI</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">04</span><h3>Technical<br>Troubleshooting</h3><p>Root-cause isolation, reproducible notes, remote support, performance profiling, regression testing, and calm user communication.</p><div class="cap-tags mono">WINDOWS · ANDROID · UNREAL INSIGHTS · QA</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">05</span><h3>Networking<br>&amp; Remote</h3><p>Secure remote access, service monitoring, HTTP/MCP diagnosis, allowlisted interfaces, and local or LAN-connected systems.</p><div class="cap-tags mono">WSL · TAILSCALE · TOKEN AUTH · LAN</div></article>
+          <article class="capability-card reveal"><span class="cap-index mono">06</span><h3>Visual<br>Design</h3><p>High-contrast graphic systems, real-time 3D presentation, visual storytelling, and interfaces where the technical and expressive reinforce each other.</p><div class="cap-tags mono">UNREAL ENGINE · WEBGL · 3D · UI SYSTEMS</div></article>
         </div>
       </div>
     </section>
