@@ -1319,8 +1319,14 @@ body,
 
 [data-theme="light"] .work .section-number,
 [data-theme="light"] .experience .section-number,
-[data-theme="light"] .timeline-date {
+[data-theme="light"] .timeline-date,
+[data-theme="light"] .education-card span,
+[data-theme="light"] .site-footer a {
   color: #5c7900;
+}
+
+[data-theme="light"] .project-status span {
+  color: #fff;
 }
 
 [data-theme="light"] .project-body > p,
