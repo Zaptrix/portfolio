@@ -144,7 +144,7 @@ import {
     const { width, height } = frame.getBoundingClientRect();
     const compact = height / Math.max(1, width) > 1.45;
     system.position.set(compact ? 0 : -1.25, compact ? 1.55 : 0.1, 0);
-    system.scale.setScalar(compact ? 0.76 : Math.min(1, width / 560));
+    system.scale.setScalar(compact ? 0.76 : Math.min(0.78, width / 560));
     camera.aspect = Math.max(0.1, width / Math.max(1, height));
     camera.updateProjectionMatrix();
     renderer.setSize(width, height, false);
