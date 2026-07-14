@@ -1,6 +1,6 @@
 # Don Cuddihee | Portfolio
 
-A static portfolio for software, AI systems, technical support, networking, and visual design. It includes responsive light/dark themes and a theme-aware WebGL glass system core built with Three.js.
+A static portfolio for software, AI systems, technical support, networking, and visual design. It includes responsive light/dark themes, a theme-aware WebGL glass system core, and lightweight 3D project markers built with Three.js.
 
 ## Run locally
 

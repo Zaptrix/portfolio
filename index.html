@@ -96,9 +96,12 @@
       <div class="hero-visual reveal">
         <div class="visual-index mono">FIG. 001 / OPERATING PROFILE</div>
         <div class="hero-frame">
-          <div class="profile-glow" aria-hidden="true"></div>
-          <canvas id="hero-canvas" data-system-scene aria-hidden="true"></canvas>
-          <div class="hero-core-fallback" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="scene-viewport" aria-hidden="true">
+            <div class="profile-glow"></div>
+            <canvas id="hero-canvas" data-system-scene></canvas>
+            <div class="hero-core-fallback"><i></i><i></i><i></i></div>
+            <div class="scene-readout mono"><span>GLASS CORE</span><span>LIVE / 01</span></div>
+          </div>
           <div class="operating-profile">
             <div class="profile-header mono"><span>DON CUDDIHEE / PRACTICE</span><span>01 / 03</span></div>
             <article class="profile-row">
@@ -133,7 +136,7 @@
 
       <div class="project-list">
         <article class="project-card reveal">
-          <div class="project-index" aria-hidden="true"><span>01</span><i></i></div>
+          <div class="project-index" aria-hidden="true"><span>01</span><canvas class="project-object" data-project-scene data-shape="octahedron"></canvas></div>
           <div class="project-body">
             <div class="project-meta mono"><span>01 / AI ENGINEERING</span><span>2026 / NOW</span></div>
             <h3>Agentic Development Workspace</h3>
@@ -149,7 +152,7 @@
         </article>
 
         <article class="project-card reveal">
-          <div class="project-index" aria-hidden="true"><span>02</span><i></i></div>
+          <div class="project-index" aria-hidden="true"><span>02</span><canvas class="project-object" data-project-scene data-shape="torus"></canvas></div>
           <div class="project-body">
             <div class="project-meta mono"><span>02 / MCP + SYSTEMS</span><span>2026 / NOW</span></div>
             <h3>Secure Operations Bridge</h3>
@@ -165,7 +168,7 @@
         </article>
 
         <article class="project-card reveal">
-          <div class="project-index" aria-hidden="true"><span>03</span><i></i></div>
+          <div class="project-index" aria-hidden="true"><span>03</span><canvas class="project-object" data-project-scene data-shape="icosahedron"></canvas></div>
           <div class="project-body">
             <div class="project-meta mono"><span>03 / UNREAL + C++</span><span>2026 / NOW</span></div>
             <h3>Multiplayer Racing Prototype</h3>
@@ -181,7 +184,7 @@
         </article>
 
         <article class="project-card reveal">
-          <div class="project-index" aria-hidden="true"><span>04</span><i></i></div>
+          <div class="project-index" aria-hidden="true"><span>04</span><canvas class="project-object" data-project-scene data-shape="cube"></canvas></div>
           <div class="project-body">
             <div class="project-meta mono"><span>04 / LOCAL DATA PRODUCT</span><span>2026 / NOW</span></div>
             <h3>Local Collection Analysis Tool</h3>
